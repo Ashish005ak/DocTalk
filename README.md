@@ -49,11 +49,12 @@ TRANSCRIPTS_DIR=backend/transcripts
 # CORS — add your frontend origin if it runs on a different port
 # CORS_ORIGINS=["http://localhost:5173","http://localhost:5174"]
 
-# LLM provider: claude | openai | gemini
+# LLM provider: claude | openai | gemini | groq
 LLM_PROVIDER=gemini
 ANTHROPIC_API_KEY=
 OPENAI_API_KEY=
 GOOGLE_API_KEY=your-key-here
+GROQ_API_KEY=
 
 # Context engine tuning (optional — sensible defaults)
 # CONTEXT_ANALYSIS_INTERVAL=2           # analyse every N responder turns
@@ -80,7 +81,7 @@ ConvoNude_1/
 │   ├── config.py                   # Pydantic settings (env-driven)
 │   ├── context/
 │   │   ├── __init__.py
-│   │   ├── llm_client.py           # LLMClient ABC, Claude/OpenAI/Gemini clients, factory
+│   │   ├── llm_client.py           # LLMClient ABC, Claude/OpenAI/Gemini/Groq clients, factory
 │   │   ├── context_models.py       # ContextObject, InformationItem, Signal models
 │   │   └── context_engine.py       # ContextEngine — three-tier prompt optimisation
 │   ├── domains/
@@ -192,16 +193,17 @@ Six profiles are loaded at startup. Each includes a framework, gap categories, s
 
 ## LLM Client Abstraction
 
-The system supports three LLM providers through a unified interface. Switch providers by changing `LLM_PROVIDER` in `.env`:
+The system supports four LLM providers through a unified interface. Switch providers by changing `LLM_PROVIDER` in `.env`:
 
 | Provider | Env Key | Default Model |
 |----------|---------|---------------|
 | `claude` | `ANTHROPIC_API_KEY` | `claude-sonnet-4-20250514` |
 | `openai` | `OPENAI_API_KEY` | `gpt-4o` |
 | `gemini` | `GOOGLE_API_KEY` | `gemini-2.5-flash` |
+| `groq` | `GROQ_API_KEY` | `llama-3.3-70b-versatile` |
 
 Features:
-- Async-first design (`AsyncAnthropic`, `AsyncOpenAI`, `generate_content_async`)
+- Async-first design (`AsyncAnthropic`, `AsyncOpenAI`, `AsyncGroq`, `generate_content_async`)
 - Retry with exponential backoff (1s → 2s → 4s) on transient errors
 - Auto-strips markdown JSON fences from LLM responses
 - Per-call latency + token usage logging

@@ -18,9 +18,11 @@ class Settings(BaseSettings):
     anthropic_api_key: str = ""
     openai_api_key: str = ""
     google_api_key: str = ""
+    groq_api_key: str = ""
     anthropic_model: str = "claude-sonnet-4-20250514"
     openai_model: str = "gpt-4o"
     gemini_model: str = "gemini-2.5-flash"
+    groq_model: str = "llama-3.3-70b-versatile"
     llm_temperature: float = 0.2
     llm_max_retries: int = 3
     llm_max_output_tokens: int = 8192          # max tokens for JSON analysis calls

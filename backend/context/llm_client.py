@@ -356,6 +356,78 @@ class GeminiClient(LLMClient):
 
 
 # ---------------------------------------------------------------------------
+# Groq
+# ---------------------------------------------------------------------------
+
+class GroqClient(LLMClient):
+    provider = "groq"
+
+    def __init__(self) -> None:
+        try:
+            from groq import AsyncGroq
+        except ImportError as exc:
+            raise ImportError("pip install groq") from exc
+        if not settings.groq_api_key:
+            raise LLMError("GROQ_API_KEY is not set in .env")
+        self._client = AsyncGroq(api_key=settings.groq_api_key)
+        self._model = settings.groq_model
+        logger.info("GroqClient initialized: model='%s' temperature=%.1f",
+                     self._model, settings.llm_temperature)
+
+    async def analyze(
+        self,
+        system_prompt: str,
+        user_prompt: str,
+        *,
+        temperature: float | None = None,
+        max_tokens: int = 4096,
+    ) -> str:
+        from groq import RateLimitError
+
+        temp = temperature if temperature is not None else settings.llm_temperature
+
+        async def _call():
+            t0 = time.perf_counter()
+            try:
+                resp = await self._client.chat.completions.create(
+                    model=self._model,
+                    temperature=temp,
+                    max_tokens=max_tokens,
+                    messages=[
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": user_prompt},
+                    ],
+                )
+            except RateLimitError as exc:
+                raise LLMRateLimitError(str(exc)) from exc
+            latency_ms = (time.perf_counter() - t0) * 1000
+            usage = resp.usage
+            finish_reason = resp.choices[0].finish_reason if resp.choices else None
+            logger.info(
+                "LLM call  provider=%s  model=%s  latency=%.0fms  "
+                "in=%d  out=%d  finish_reason=%s  max_tokens=%d",
+                self.provider,
+                self._model,
+                latency_ms,
+                usage.prompt_tokens if usage else 0,
+                usage.completion_tokens if usage else 0,
+                finish_reason,
+                max_tokens,
+            )
+            if finish_reason == "length":
+                logger.warning(
+                    "Groq response TRUNCATED (hit max_tokens=%d). "
+                    "Response will likely fail JSON parsing.",
+                    max_tokens,
+                )
+            return resp.choices[0].message.content or ""
+
+        return await _retry_with_backoff(
+            _call, max_retries=settings.llm_max_retries, provider=self.provider
+        )
+
+
+# ---------------------------------------------------------------------------
 # Factory
 # ---------------------------------------------------------------------------
 
@@ -363,6 +435,7 @@ _PROVIDERS: dict[str, type[LLMClient]] = {
     "claude": ClaudeClient,
     "openai": OpenAIClient,
     "gemini": GeminiClient,
+    "groq": GroqClient,
 }
 
 _cached_clients: dict[str, LLMClient] = {}
@@ -405,5 +478,6 @@ class LLMClientFactory:
             "claude": settings.anthropic_api_key,
             "openai": settings.openai_api_key,
             "gemini": settings.google_api_key,
+            "groq": settings.groq_api_key,
         }
         return bool(key_map.get(provider, ""))
