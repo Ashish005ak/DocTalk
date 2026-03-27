@@ -1,0 +1,128 @@
+{
+    "id": "car_showroom_feedback",
+    "domain": "customer_service",
+    "title": "Car Showroom — Customer Feedback Intake",
+    "description": "A showroom salesperson conducts an initial feedback session with a customer who recently purchased a vehicle. Follows a structured intake framework.",
+    "utterances": [
+      {
+        "id": "utt_001",
+        "timestamp": "00:00:04.000",
+        "speaker": "interviewer",
+        "text": "Thank you for visiting us today. Could you tell me about your experience with the showroom and the buying process?"
+      },
+      {
+        "id": "utt_002",
+        "timestamp": "00:00:15.000",
+        "speaker": "responder",
+        "text": "Sure. I came in last Saturday around 2 PM. The staff greeted me promptly and were very patient while I explored different models."
+      },
+      {
+        "id": "utt_003",
+        "timestamp": "00:00:30.000",
+        "speaker": "interviewer",
+        "text": "Were there any specific staff members who stood out to you for good service?"
+      },
+      {
+        "id": "utt_004",
+        "timestamp": "00:00:38.500",
+        "speaker": "responder",
+        "text": "Yes, Alex helped me a lot. He explained the features of the SUV I was interested in and even offered a test drive on short notice."
+      },
+      {
+        "id": "utt_005",
+        "timestamp": "00:00:50.000",
+        "speaker": "interviewer",
+        "text": "That's great to hear. How did you find the selection of vehicles available?"
+      },
+      {
+        "id": "utt_006",
+        "timestamp": "00:00:57.000",
+        "speaker": "responder",
+        "text": "There was a good variety, but I was hoping to see more color options for the SUV. Still, the models on display were enough for me to make a decision."
+      },
+      {
+        "id": "utt_007",
+        "timestamp": "00:01:10.000",
+        "speaker": "interviewer",
+        "text": "Did you face any challenges during the purchasing process?"
+      },
+      {
+        "id": "utt_008",
+        "timestamp": "00:01:18.000",
+        "speaker": "responder",
+        "text": "Not really, everything went smoothly. Paperwork was a bit longer than expected, but the staff explained everything clearly."
+      },
+      {
+        "id": "utt_009",
+        "timestamp": "00:01:30.000",
+        "speaker": "interviewer",
+        "text": "And what about the delivery of your vehicle? Were you satisfied?"
+      },
+      {
+        "id": "utt_010",
+        "timestamp": "00:01:37.000",
+        "speaker": "responder",
+        "text": "Yes, I received my car last Thursday. The showroom gave me a full orientation and checked that everything was in perfect condition."
+      },
+      {
+        "id": "utt_011",
+        "timestamp": "00:01:50.000",
+        "speaker": "interviewer",
+        "text": "How has your experience been with the vehicle itself so far?"
+      },
+      {
+        "id": "utt_012",
+        "timestamp": "00:01:58.000",
+        "speaker": "responder",
+        "text": "It's been excellent. Smooth ride, all the features work as described. The navigation system took a little time to get used to, but that’s normal."
+      },
+      {
+        "id": "utt_013",
+        "timestamp": "00:02:12.000",
+        "speaker": "interviewer",
+        "text": "Have you had any service interactions since purchase?"
+      },
+      {
+        "id": "utt_014",
+        "timestamp": "00:02:20.000",
+        "speaker": "responder",
+        "text": "No service visits yet, but I did call once with a question about pairing my phone. They were very helpful over the phone."
+      },
+      {
+        "id": "utt_015",
+        "timestamp": "00:02:33.000",
+        "speaker": "interviewer",
+        "text": "Do you have any suggestions for improving our showroom experience?"
+      },
+      {
+        "id": "utt_016",
+        "timestamp": "00:02:40.000",
+        "speaker": "responder",
+        "text": "Maybe more seating in the waiting area and a few more demo vehicles for test drives, especially on busy days."
+      },
+      {
+        "id": "utt_017",
+        "timestamp": "00:02:53.000",
+        "speaker": "interviewer",
+        "text": "Thank you, that’s valuable feedback. Overall, would you recommend our showroom to others?"
+      },
+      {
+        "id": "utt_018",
+        "timestamp": "00:03:00.000",
+        "speaker": "responder",
+        "text": "Definitely. The staff were professional, patient, and knowledgeable. I had a very positive experience."
+      },
+      {
+        "id": "utt_019",
+        "timestamp": "00:03:10.000",
+        "speaker": "interviewer",
+        "text": "Fantastic. We really appreciate your time and feedback."
+      },
+      {
+        "id": "utt_020",
+        "timestamp": "00:03:16.000",
+        "speaker": "responder",
+        "text": "My pleasure. Thank you for following up with me."
+      }
+    ]
+  }

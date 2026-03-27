@@ -1,0 +1,176 @@
+{
+  "id": "medical_chest_pain",
+  "domain": "medical",
+  "title": "Chest Pain — History Taking",
+  "description": "A GP takes a full cardiac history from a 54-year-old male presenting with chest pain. Follows the SOCRATES framework.",
+  "utterances": [
+    {
+      "id": "utt_001",
+      "timestamp": "00:00:03.000",
+      "speaker": "interviewer",
+      "text": "Good morning. What's brought you in today?"
+    },
+    {
+      "id": "utt_002",
+      "timestamp": "00:00:10.500",
+      "speaker": "responder",
+      "text": "I've been having this chest pain for about three days now and it's been worrying me quite a bit."
+    },
+    {
+      "id": "utt_003",
+      "timestamp": "00:00:19.000",
+      "speaker": "interviewer",
+      "text": "I'm glad you came in. Can you point to where exactly you feel the pain?"
+    },
+    {
+      "id": "utt_004",
+      "timestamp": "00:00:27.500",
+      "speaker": "responder",
+      "text": "It's right here in the middle of my chest, sort of behind the breastbone. Sometimes it feels like it spreads a bit."
+    },
+    {
+      "id": "utt_005",
+      "timestamp": "00:00:38.000",
+      "speaker": "interviewer",
+      "text": "When you say it spreads — where does it go?"
+    },
+    {
+      "id": "utt_006",
+      "timestamp": "00:00:45.000",
+      "speaker": "responder",
+      "text": "To my left shoulder mostly. Once or twice I thought I felt it in my jaw but I wasn't sure if that was related."
+    },
+    {
+      "id": "utt_007",
+      "timestamp": "00:00:57.000",
+      "speaker": "interviewer",
+      "text": "That's very helpful. How would you describe the pain — is it sharp, dull, a pressure, burning?"
+    },
+    {
+      "id": "utt_008",
+      "timestamp": "00:01:06.000",
+      "speaker": "responder",
+      "text": "More of a tightness really. Like someone is squeezing my chest. It's not sharp at all."
+    },
+    {
+      "id": "utt_009",
+      "timestamp": "00:01:15.000",
+      "speaker": "interviewer",
+      "text": "When does it tend to come on? Is there anything that triggers it?"
+    },
+    {
+      "id": "utt_010",
+      "timestamp": "00:01:25.000",
+      "speaker": "responder",
+      "text": "It's definitely worse when I'm doing something physical. Like climbing the stairs or walking fast. It started three days ago when I was mowing the lawn."
+    },
+    {
+      "id": "utt_011",
+      "timestamp": "00:01:38.000",
+      "speaker": "interviewer",
+      "text": "And does it go away when you stop and rest?"
+    },
+    {
+      "id": "utt_012",
+      "timestamp": "00:01:45.500",
+      "speaker": "responder",
+      "text": "Yes, within a few minutes of sitting down it usually eases off. Although last night it woke me up at about 2am even though I'd been asleep for hours."
+    },
+    {
+      "id": "utt_013",
+      "timestamp": "00:02:00.000",
+      "speaker": "interviewer",
+      "text": "That nocturnal episode is important. How severe was the pain at its worst — on a scale of 0 to 10?"
+    },
+    {
+      "id": "utt_014",
+      "timestamp": "00:02:11.000",
+      "speaker": "responder",
+      "text": "During the day maybe a 5 or 6. Last night it was probably a 7 or 8. I was quite scared."
+    },
+    {
+      "id": "utt_015",
+      "timestamp": "00:02:22.000",
+      "speaker": "interviewer",
+      "text": "Understandably so. Have you had any other symptoms along with the chest pain — things like breathlessness, sweating, nausea, or palpitations?"
+    },
+    {
+      "id": "utt_016",
+      "timestamp": "00:02:36.000",
+      "speaker": "responder",
+      "text": "Yes, I do get breathless when the chest pain comes on. And I've noticed I've been more tired than usual this week. I don't think I've had much nausea but I did feel a bit clammy last night."
+    },
+    {
+      "id": "utt_017",
+      "timestamp": "00:02:52.000",
+      "speaker": "interviewer",
+      "text": "Have you had anything like this before, or has this come on completely out of the blue?"
+    },
+    {
+      "id": "utt_018",
+      "timestamp": "00:03:02.000",
+      "speaker": "responder",
+      "text": "I had a mild episode maybe two years ago but the doctor at the time said it was probably indigestion and it went away. This feels different though."
+    },
+    {
+      "id": "utt_019",
+      "timestamp": "00:03:16.000",
+      "speaker": "interviewer",
+      "text": "Do you have any history of heart problems, high blood pressure, or high cholesterol?"
+    },
+    {
+      "id": "utt_020",
+      "timestamp": "00:03:26.000",
+      "speaker": "responder",
+      "text": "I was told my blood pressure was a bit high about a year ago but I never got treatment for it. I don't know about my cholesterol."
+    },
+    {
+      "id": "utt_021",
+      "timestamp": "00:03:39.000",
+      "speaker": "interviewer",
+      "text": "Any family history of heart disease? Parents, siblings?"
+    },
+    {
+      "id": "utt_022",
+      "timestamp": "00:03:47.000",
+      "speaker": "responder",
+      "text": "My father had a heart attack at 58. He survived but he was on a lot of medication after that."
+    },
+    {
+      "id": "utt_023",
+      "timestamp": "00:03:58.000",
+      "speaker": "interviewer",
+      "text": "Do you smoke, or have you smoked in the past?"
+    },
+    {
+      "id": "utt_024",
+      "timestamp": "00:04:06.000",
+      "speaker": "responder",
+      "text": "I used to smoke about 15 a day but I gave up six years ago. Before that I smoked for about 20 years."
+    },
+    {
+      "id": "utt_025",
+      "timestamp": "00:04:18.000",
+      "speaker": "interviewer",
+      "text": "Are you on any medications at the moment, prescribed or over-the-counter?"
+    },
+    {
+      "id": "utt_026",
+      "timestamp": "00:04:27.000",
+      "speaker": "responder",
+      "text": "Just some ibuprofen I've been taking for lower back pain. Nothing else regularly."
+    },
+    {
+      "id": "utt_027",
+      "timestamp": "00:04:38.000",
+      "speaker": "interviewer",
+      "text": "Have you taken anything for the chest pain itself — like antacids or GTN spray?"
+    },
+    {
+      "id": "utt_028",
+      "timestamp": "00:04:48.000",
+      "speaker": "responder",
+      "text": "I tried some Gaviscon last night thinking it might be heartburn but it didn't help at all. No spray."
+    }
+  ]
+}

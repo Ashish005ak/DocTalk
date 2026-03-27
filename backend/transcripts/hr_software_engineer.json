@@ -1,0 +1,164 @@
+{
+  "id": "hr_software_engineer",
+  "domain": "hr",
+  "title": "Senior Software Engineer — Behavioural Interview",
+  "description": "A recruiter conducts a structured behavioural interview with a candidate for a senior backend engineering role. Follows the STAR framework with competency mapping.",
+  "utterances": [
+    {
+      "id": "utt_001",
+      "timestamp": "00:00:04.000",
+      "speaker": "interviewer",
+      "text": "Let's get started. Can you walk me through a time when you had to lead a technically complex project under significant time pressure?"
+    },
+    {
+      "id": "utt_002",
+      "timestamp": "00:00:16.000",
+      "speaker": "responder",
+      "text": "Sure. About 18 months ago at my current company we had a critical payments service that was failing under load — our Black Friday traffic was four times higher than we'd modelled for. I ended up leading the emergency response over a 72-hour window."
+    },
+    {
+      "id": "utt_003",
+      "timestamp": "00:00:35.000",
+      "speaker": "interviewer",
+      "text": "What was your specific role — were you the most senior person involved or were there others above you?"
+    },
+    {
+      "id": "utt_004",
+      "timestamp": "00:00:45.000",
+      "speaker": "responder",
+      "text": "My engineering manager was aware but they were travelling. I was the most senior engineer on the incident. I had three other engineers working under me and I was coordinating with the infrastructure team."
+    },
+    {
+      "id": "utt_005",
+      "timestamp": "00:01:01.000",
+      "speaker": "interviewer",
+      "text": "How did you diagnose where the bottleneck was?"
+    },
+    {
+      "id": "utt_006",
+      "timestamp": "00:01:10.000",
+      "speaker": "responder",
+      "text": "First thing I did was look at our distributed tracing — we use Datadog. The latency was spiking at the database layer, not in the application code. Turned out we had an unindexed query that was fine at low volume but was doing a full table scan at scale. The table had grown to 400 million rows."
+    },
+    {
+      "id": "utt_007",
+      "timestamp": "00:01:32.000",
+      "speaker": "interviewer",
+      "text": "How did you handle the fix without taking the system fully offline?"
+    },
+    {
+      "id": "utt_008",
+      "timestamp": "00:01:41.000",
+      "speaker": "responder",
+      "text": "We built the index concurrently — Postgres supports that — so it doesn't lock the table. While that was running I had the team implement a short-term read replica to distribute the query load. It bought us about four hours to get the index fully built."
+    },
+    {
+      "id": "utt_009",
+      "timestamp": "00:02:00.000",
+      "speaker": "interviewer",
+      "text": "What was the outcome in terms of business impact?"
+    },
+    {
+      "id": "utt_010",
+      "timestamp": "00:02:09.000",
+      "speaker": "responder",
+      "text": "We lost about 40 minutes of degraded performance but no complete outage. Finance estimated we would have lost around £800,000 in transactions if we'd gone fully down during that window. The fix held through the rest of the peak period."
+    },
+    {
+      "id": "utt_011",
+      "timestamp": "00:02:27.000",
+      "speaker": "interviewer",
+      "text": "Tell me about a time you had a significant disagreement with a colleague or manager about a technical decision. How did you handle it?"
+    },
+    {
+      "id": "utt_012",
+      "timestamp": "00:02:40.000",
+      "speaker": "responder",
+      "text": "Last year we were debating whether to go with a microservices approach for a new feature or extend our existing monolith. I was strongly in favour of extending the monolith given our team size and deployment complexity. My manager wanted to move to microservices because it was the direction the wider engineering org was heading."
+    },
+    {
+      "id": "utt_013",
+      "timestamp": "00:03:00.000",
+      "speaker": "interviewer",
+      "text": "What specifically did you do to make your case?"
+    },
+    {
+      "id": "utt_014",
+      "timestamp": "00:03:08.000",
+      "speaker": "responder",
+      "text": "I put together a written proposal with a cost-benefit breakdown — deployment overhead, testing complexity, latency between services. I also found two case studies of similar-sized teams that had hit serious operational problems going microservices too early. I shared it before the decision meeting rather than arguing on the day."
+    },
+    {
+      "id": "utt_015",
+      "timestamp": "00:03:27.000",
+      "speaker": "interviewer",
+      "text": "And what happened?"
+    },
+    {
+      "id": "utt_016",
+      "timestamp": "00:03:33.000",
+      "speaker": "responder",
+      "text": "We reached a compromise — we built the feature as a separate service but agreed on a simplified deployment model that reduced the overhead. It wasn't exactly what I wanted but it was a better outcome than either pure position."
+    },
+    {
+      "id": "utt_017",
+      "timestamp": "00:03:50.000",
+      "speaker": "interviewer",
+      "text": "Can you give me an example of a time you received critical feedback that was difficult to hear?"
+    },
+    {
+      "id": "utt_018",
+      "timestamp": "00:04:01.000",
+      "speaker": "responder",
+      "text": "In my 360 review two years ago, two colleagues independently said I had a tendency to take over in collaborative discussions rather than letting others reach conclusions themselves. That was hard to read because I thought I was being helpful."
+    },
+    {
+      "id": "utt_019",
+      "timestamp": "00:04:18.000",
+      "speaker": "interviewer",
+      "text": "What did you actually do about it?"
+    },
+    {
+      "id": "utt_020",
+      "timestamp": "00:04:25.000",
+      "speaker": "responder",
+      "text": "I asked one of those colleagues to be more specific, which helped. I started deliberately asking questions in meetings instead of proposing solutions first. And I started tracking whether I was the one who'd spoken most in any given meeting — if so, I'd stay quiet for the next ten minutes."
+    },
+    {
+      "id": "utt_021",
+      "timestamp": "00:04:44.000",
+      "speaker": "interviewer",
+      "text": "How do you approach mentoring more junior engineers on your team?"
+    },
+    {
+      "id": "utt_022",
+      "timestamp": "00:04:53.000",
+      "speaker": "responder",
+      "text": "I run weekly one-to-ones with the two juniors I mentor. I try to ask them what they're stuck on before offering to pair — I want them to articulate the problem first. I also think code review is underused as a mentoring tool so I write fairly detailed comments explaining why I'm suggesting a change, not just that it should change."
+    },
+    {
+      "id": "utt_023",
+      "timestamp": "00:05:14.000",
+      "speaker": "interviewer",
+      "text": "Where do you see the gaps in your current skill set that you'd want to address in the next role?"
+    },
+    {
+      "id": "utt_024",
+      "timestamp": "00:05:23.000",
+      "speaker": "responder",
+      "text": "I want to get stronger on the infrastructure and platform side. Most of my career has been application-layer work and I'm comfortable there, but I've relied on others when it comes to Kubernetes, capacity planning, and cost optimisation at the cloud layer."
+    },
+    {
+      "id": "utt_025",
+      "timestamp": "00:05:40.000",
+      "speaker": "interviewer",
+      "text": "What does your ideal working environment look like in terms of team structure and how you interact with product?"
+    },
+    {
+      "id": "utt_026",
+      "timestamp": "00:05:51.000",
+      "speaker": "responder",
+      "text": "I do best in small, autonomous teams — five to eight people — where engineers are involved early in scoping rather than handed a specification. I've found I do worse work when I'm just implementing someone else's design without any input into the problem framing."
+    }
+  ]
+}

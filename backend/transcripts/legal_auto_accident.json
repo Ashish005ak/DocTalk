@@ -1,0 +1,164 @@
+{
+  "id": "legal_auto_accident",
+  "domain": "legal",
+  "title": "Auto Accident — Client Intake",
+  "description": "A personal injury lawyer conducts an initial intake with a client injured in a rear-end collision. Follows the evidence chain framework.",
+  "utterances": [
+    {
+      "id": "utt_001",
+      "timestamp": "00:00:04.000",
+      "speaker": "interviewer",
+      "text": "Thank you for coming in. Tell me in your own words what happened on the day of the accident."
+    },
+    {
+      "id": "utt_002",
+      "timestamp": "00:00:14.000",
+      "speaker": "responder",
+      "text": "It was the 14th of January, around 5:30 in the evening. I was stopped at a red light on Maple Avenue and a car just slammed into the back of me at full speed. I didn't even see it coming."
+    },
+    {
+      "id": "utt_003",
+      "timestamp": "00:00:30.000",
+      "speaker": "interviewer",
+      "text": "Were there any witnesses at the scene that you're aware of?"
+    },
+    {
+      "id": "utt_004",
+      "timestamp": "00:00:38.500",
+      "speaker": "responder",
+      "text": "Yes, a woman in the car next to me stopped and gave me her number. Her name is Sandra Okafor. And I think a cyclist stopped briefly but I never got their details."
+    },
+    {
+      "id": "utt_005",
+      "timestamp": "00:00:53.000",
+      "speaker": "interviewer",
+      "text": "Did the police attend? And was a report filed?"
+    },
+    {
+      "id": "utt_006",
+      "timestamp": "00:01:01.000",
+      "speaker": "responder",
+      "text": "Yes, two officers came. They filed a report on the spot. I have a copy at home — I can bring it."
+    },
+    {
+      "id": "utt_007",
+      "timestamp": "00:01:12.000",
+      "speaker": "interviewer",
+      "text": "Please do — that will be important. What about the other driver? Did they admit fault at the scene or say anything significant?"
+    },
+    {
+      "id": "utt_008",
+      "timestamp": "00:01:24.000",
+      "speaker": "responder",
+      "text": "He kept saying he didn't see the light change. He wasn't on his phone that I saw but he seemed distracted. He did say sorry twice before the police arrived."
+    },
+    {
+      "id": "utt_009",
+      "timestamp": "00:01:38.000",
+      "speaker": "interviewer",
+      "text": "Did you exchange insurance details with the other driver?"
+    },
+    {
+      "id": "utt_010",
+      "timestamp": "00:01:46.000",
+      "speaker": "responder",
+      "text": "Yes, I have his insurance card — it's State Farm. And I took photos of both vehicles, the damage, and his licence plate."
+    },
+    {
+      "id": "utt_011",
+      "timestamp": "00:01:59.000",
+      "speaker": "interviewer",
+      "text": "Excellent. Now let's talk about your injuries. What happened to you physically at the time of impact?"
+    },
+    {
+      "id": "utt_012",
+      "timestamp": "00:02:09.000",
+      "speaker": "responder",
+      "text": "My head snapped back hard. I had immediate pain in my neck and my right shoulder. My airbag didn't deploy because it was a rear hit so I hit the headrest."
+    },
+    {
+      "id": "utt_013",
+      "timestamp": "00:02:25.000",
+      "speaker": "interviewer",
+      "text": "Did you go to hospital that day?"
+    },
+    {
+      "id": "utt_014",
+      "timestamp": "00:02:32.000",
+      "speaker": "responder",
+      "text": "The ambulance took me to St. Catherine's ER. They did X-rays, said there were no fractures, and discharged me with painkillers. But the pain got worse over the following days."
+    },
+    {
+      "id": "utt_015",
+      "timestamp": "00:02:48.000",
+      "speaker": "interviewer",
+      "text": "Have you seen any other doctors or specialists since the ER visit?"
+    },
+    {
+      "id": "utt_016",
+      "timestamp": "00:02:56.000",
+      "speaker": "responder",
+      "text": "My GP referred me to a physiotherapist. I've had five sessions so far. I also saw an orthopaedic specialist last week who mentioned I might need an MRI."
+    },
+    {
+      "id": "utt_017",
+      "timestamp": "00:03:12.000",
+      "speaker": "interviewer",
+      "text": "Are you keeping records of all your treatment visits and expenses?"
+    },
+    {
+      "id": "utt_018",
+      "timestamp": "00:03:19.000",
+      "speaker": "responder",
+      "text": "Mostly yes. I have the ER bill and the physio invoices. I haven't got the specialist bill yet. I also had to take two weeks off work."
+    },
+    {
+      "id": "utt_019",
+      "timestamp": "00:03:33.000",
+      "speaker": "interviewer",
+      "text": "That lost income is claimable. Do you have documentation from your employer confirming the time off?"
+    },
+    {
+      "id": "utt_020",
+      "timestamp": "00:03:43.000",
+      "speaker": "responder",
+      "text": "I have the sick leave form my manager signed. I wasn't paid during that time because I'd already used my sick days."
+    },
+    {
+      "id": "utt_021",
+      "timestamp": "00:03:55.000",
+      "speaker": "interviewer",
+      "text": "Have you been contacted by the other driver's insurance company at all?"
+    },
+    {
+      "id": "utt_022",
+      "timestamp": "00:04:03.000",
+      "speaker": "responder",
+      "text": "Yes, a claims adjuster from State Farm called me three days after the accident. They wanted to record a statement. I didn't say much — I told them I had a lawyer."
+    },
+    {
+      "id": "utt_023",
+      "timestamp": "00:04:18.000",
+      "speaker": "interviewer",
+      "text": "Good — never give a recorded statement without counsel. Did they make any settlement offers?"
+    },
+    {
+      "id": "utt_024",
+      "timestamp": "00:04:27.000",
+      "speaker": "responder",
+      "text": "They mentioned a figure of $4,500 but it felt very low given my medical bills alone are already over $3,000."
+    },
+    {
+      "id": "utt_025",
+      "timestamp": "00:04:40.000",
+      "speaker": "interviewer",
+      "text": "You were right not to accept that. Is there any pre-existing injury or condition to the neck or shoulder that the other side might raise?"
+    },
+    {
+      "id": "utt_026",
+      "timestamp": "00:04:52.000",
+      "speaker": "responder",
+      "text": "I had some mild back stiffness about three years ago but nothing to do with my neck or shoulder. And I was completely fine before this accident."
+    }
+  ]
+}
