@@ -19,47 +19,47 @@ import type {
   WSAction,
   WSMessage,
 } from './types';
-
+ 
 const API_BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:8000';
-
+ 
 export default function App() {
   // Session setup visibility
   const [showSetup, setShowSetup] = useState(true);
   const [sessionConfig, setSessionConfig] = useState<SessionConfig | null>(null);
   const [transcriptTitle, setTranscriptTitle] = useState('');
   const [totalTurns, setTotalTurns] = useState(0);
-
+ 
   // Replay state (driven by WebSocket messages)
   const [replayState, setReplayState] = useState<ReplayState>('idle');
   const [speed, setSpeed] = useState<Speed>(1.0);
   const [currentTurn, setCurrentTurn] = useState(0);
-
+ 
   // Transcript display state
   const [utterances, setUtterances] = useState<Utterance[]>([]);
   const [preview, setPreview] = useState<Utterance | null>(null);
-
+ 
   // Context engine state
   const [contextObject, setContextObject] = useState<ContextObject | null>(null);
   const [domainProfile, setDomainProfile] = useState<DomainProfile | null>(null);
-
+ 
   // Suggestion engine state
   const [suggestions, setSuggestions] = useState<SuggestionOutput | null>(null);
-
+ 
   // Chat mode state
   const [chatWaiting, setChatWaiting] = useState(false);
-
+ 
   // Resizable split between Context and Suggestions panels (percentage for Context)
   const [splitPct, setSplitPct] = useState(50);
   const rightColumnRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
-
+ 
   const onDividerMouseDown = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     isDragging.current = true;
     document.body.style.cursor = 'row-resize';
     document.body.style.userSelect = 'none';
   }, []);
-
+ 
   useEffect(() => {
     const onMouseMove = (e: MouseEvent) => {
       if (!isDragging.current || !rightColumnRef.current) return;
@@ -82,7 +82,7 @@ export default function App() {
       window.removeEventListener('mouseup', onMouseUp);
     };
   }, []);
-
+ 
   const handleMessage = useCallback((msg: WSMessage) => {
     switch (msg.type) {
       case 'utterance_preview': {
@@ -138,7 +138,7 @@ export default function App() {
       }
     }
   }, []);
-
+ 
   const fetchTranscriptMeta = async (transcriptId: string) => {
     try {
       const res = await fetch(`${API_BASE}/api/transcripts/${transcriptId}`);
@@ -151,9 +151,9 @@ export default function App() {
       // Not critical
     }
   };
-
+ 
   const { connectionState, send, reconnect } = useWebSocket(handleMessage);
-
+ 
   const handleAction = useCallback(
     (action: WSAction) => {
       send(action);
@@ -164,7 +164,7 @@ export default function App() {
     },
     [send],
   );
-
+ 
   const fetchDomainProfile = async (domainId: string) => {
     try {
       const res = await fetch(`${API_BASE}/api/domains/${domainId}`);
@@ -176,11 +176,11 @@ export default function App() {
       // Non-critical
     }
   };
-
-  const handleSessionStart = (config: SessionConfig) => {
+ 
+  const handleSessionStart = (config: SessionConfig, openingUtterance?: Utterance) => {
     setSessionConfig(config);
     setShowSetup(false);
-    setUtterances([]);
+    setUtterances(openingUtterance ? [openingUtterance] : []);
     setPreview(null);
     setCurrentTurn(0);
     setReplayState('idle');
@@ -196,7 +196,7 @@ export default function App() {
       setTimeout(() => send({ action: 'start' }), 100);
     }
   };
-
+ 
   const handleReset = () => {
     send({ action: 'stop' });
     setShowSetup(true);
@@ -208,7 +208,7 @@ export default function App() {
     setSuggestions(null);
     setChatWaiting(false);
   };
-
+ 
   const sendChatMessage = useCallback(
     (text: string) => {
       setChatWaiting(true);
@@ -216,17 +216,17 @@ export default function App() {
     },
     [send],
   );
-
+ 
   const interviewerLabel = sessionConfig?.interviewer_label ?? 'Interviewer';
   const responderLabel = sessionConfig?.responder_label ?? 'Responder';
   const isChatMode = sessionConfig?.mode === 'chat';
-
+ 
   return (
     <div className="flex flex-col h-screen bg-[#0f1117]">
-
+ 
       {/* Session setup modal */}
       {showSetup && <SessionSetup onSessionStart={handleSessionStart} />}
-
+ 
       {/* Top control bar — simulation uses full controls, chat uses a minimal header */}
       {isChatMode ? (
         <div className="flex items-center justify-between px-4 py-2.5 border-b border-[#2d3555] bg-[#141927]">
@@ -257,10 +257,10 @@ export default function App() {
           onReset={handleReset}
         />
       )}
-
+ 
       {/* Main content area */}
       <div className="flex flex-1 overflow-hidden">
-
+ 
         {/* Left — Transcript panel (60%) + optional chat input */}
         <div className="flex flex-col w-[60%] border-r border-[#2d3555]">
           <div className="px-4 py-2.5 border-b border-[#2d3555] bg-[#141927]">
@@ -278,10 +278,10 @@ export default function App() {
             <ChatPanel onSend={sendChatMessage} waiting={chatWaiting} />
           )}
         </div>
-
+ 
         {/* Right — Context + Suggestions (40%), resizable split */}
         <div ref={rightColumnRef} className="flex flex-col w-[40%] overflow-hidden">
-
+ 
           {/* Context panel */}
           <div
             className="flex flex-col min-h-0 overflow-hidden"
@@ -300,7 +300,7 @@ export default function App() {
               gapCategories={domainProfile?.gap_categories ?? []}
             />
           </div>
-
+ 
           {/* Drag divider + Suggestions panel (simulation mode only) */}
           {!isChatMode && (
           <>
@@ -310,7 +310,7 @@ export default function App() {
           >
             <div className="w-8 h-0.5 rounded-full bg-slate-700 group-hover:bg-indigo-400 transition-colors" />
           </div>
-
+ 
           <div
             className="flex flex-col min-h-0 overflow-hidden"
             style={{ height: `${100 - splitPct}%` }}
@@ -329,7 +329,7 @@ export default function App() {
           )}
         </div>
       </div>
-
+ 
       {/* Connection lost banner */}
       {connectionState === 'disconnected' && (
         <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-red-900/90 border border-red-700 text-red-200 text-sm px-4 py-2.5 rounded-lg flex items-center gap-3 shadow-xl">
@@ -343,3 +343,4 @@ export default function App() {
     </div>
   );
 }
+ 

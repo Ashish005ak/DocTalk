@@ -1,19 +1,19 @@
 import { useEffect, useRef, useState } from 'react';
-import type { DomainProfile, SessionConfig, SessionMode, Speed, TranscriptMeta } from '../types';
-
+import type { DomainProfile, SessionConfig, SessionMode, Speed, TranscriptMeta, Utterance } from '../types';
+ 
 const API_BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:8000';
-
+ 
 interface SessionSetupProps {
-  onSessionStart: (config: SessionConfig) => void;
+  onSessionStart: (config: SessionConfig, openingUtterance?: Utterance) => void;
 }
-
+ 
 const SPEED_OPTIONS: { value: Speed; label: string }[] = [
   { value: 0.5, label: '0.5×' },
   { value: 1.0, label: '1×' },
   { value: 2.0, label: '2×' },
   { value: 4.0, label: '4×' },
 ];
-
+ 
 export function SessionSetup({ onSessionStart }: SessionSetupProps) {
   const [transcripts, setTranscripts] = useState<TranscriptMeta[]>([]);
   const [domainProfiles, setDomainProfiles] = useState<DomainProfile[]>([]);
@@ -24,18 +24,18 @@ export function SessionSetup({ onSessionStart }: SessionSetupProps) {
   const [domain, setDomain] = useState<string>('medical');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
+ 
   // Chat mode
   const [chatModeEnabled, setChatModeEnabled] = useState(false);
   const [mode, setMode] = useState<SessionMode>('simulation');
-
+ 
   // Custom transcript upload
   const [showCustomUpload, setShowCustomUpload] = useState(false);
   const [customJson, setCustomJson] = useState('');
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
+ 
   useEffect(() => {
     fetch(`${API_BASE}/api/transcripts`)
       .then((r) => r.json())
@@ -47,20 +47,20 @@ export function SessionSetup({ onSessionStart }: SessionSetupProps) {
         }
       })
       .catch(() => setError('Could not load transcripts. Is the backend running?'));
-
+ 
     fetch(`${API_BASE}/api/domains`)
       .then((r) => r.json())
       .then((data: DomainProfile[]) => setDomainProfiles(data))
       .catch(() => { /* domain list is non-critical */ });
-
+ 
     fetch(`${API_BASE}/api/features`)
       .then((r) => r.json())
       .then((data: { chat_mode_enabled: boolean }) => setChatModeEnabled(data.chat_mode_enabled))
       .catch(() => { /* feature flags non-critical */ });
   }, []);
-
+ 
   const selectedProfile = domainProfiles.find((p) => p.id === domain);
-
+ 
   const applyDomainLabels = (domainId: string) => {
     const profile = domainProfiles.find((p) => p.id === domainId);
     if (profile?.role_labels) {
@@ -68,7 +68,7 @@ export function SessionSetup({ onSessionStart }: SessionSetupProps) {
       setResponderLabel(profile.role_labels.responder ?? 'Responder');
     }
   };
-
+ 
   const handleTranscriptChange = (id: string) => {
     setSelectedTranscript(id);
     const t = transcripts.find((tr) => tr.id === id);
@@ -77,12 +77,12 @@ export function SessionSetup({ onSessionStart }: SessionSetupProps) {
       applyDomainLabels(t.domain);
     }
   };
-
+ 
   const handleDomainChange = (domainId: string) => {
     setDomain(domainId);
     applyDomainLabels(domainId);
   };
-
+ 
   const handleFileUpload = async (file: File) => {
     setUploading(true);
     setUploadError(null);
@@ -108,7 +108,7 @@ export function SessionSetup({ onSessionStart }: SessionSetupProps) {
       setUploading(false);
     }
   };
-
+ 
   const handleJsonPaste = async () => {
     setUploading(true);
     setUploadError(null);
@@ -135,9 +135,9 @@ export function SessionSetup({ onSessionStart }: SessionSetupProps) {
       setUploading(false);
     }
   };
-
+ 
   const isChatMode = mode === 'chat';
-
+ 
   const handleStart = async () => {
     if (!isChatMode && !selectedTranscript) return;
     setLoading(true);
@@ -160,20 +160,21 @@ export function SessionSetup({ onSessionStart }: SessionSetupProps) {
         const errData = await res.json().catch(() => ({}));
         throw new Error(errData.detail ?? 'Failed to configure session');
       }
-      onSessionStart(config);
+      const responseData = await res.json().catch(() => ({}));
+      onSessionStart(config, responseData.opening_utterance);
     } catch (e) {
       setError((e as Error).message);
     } finally {
       setLoading(false);
     }
   };
-
+ 
   const selectedMeta = transcripts.find((t) => t.id === selectedTranscript);
-
+ 
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-[#1a1f2e] border border-[#2d3555] rounded-2xl shadow-2xl w-full max-w-lg">
-
+ 
         {/* Header */}
         <div className="px-6 py-5 border-b border-[#2d3555]">
           <div className="flex items-center gap-3">
@@ -184,14 +185,14 @@ export function SessionSetup({ onSessionStart }: SessionSetupProps) {
             </div>
           </div>
         </div>
-
+ 
         <div className="px-6 py-5 space-y-5">
           {error && (
             <div className="bg-red-500/10 border border-red-500/30 text-red-400 text-sm rounded-lg px-4 py-3">
               {error}
             </div>
           )}
-
+ 
           {/* Mode toggle (only if chat mode is enabled and domain is medical) */}
           {chatModeEnabled && domain === 'medical' && (
             <div>
@@ -220,7 +221,7 @@ export function SessionSetup({ onSessionStart }: SessionSetupProps) {
               )}
             </div>
           )}
-
+ 
           {/* Transcript picker (simulation mode only) */}
           {!isChatMode && (
           <div>
@@ -257,7 +258,7 @@ export function SessionSetup({ onSessionStart }: SessionSetupProps) {
             )}
           </div>
           )}
-
+ 
           {/* Custom upload panel */}
           {!isChatMode && showCustomUpload && (
             <div className="bg-[#141927] border border-[#2d3555] rounded-lg p-4 space-y-3">
@@ -302,7 +303,7 @@ export function SessionSetup({ onSessionStart }: SessionSetupProps) {
               </button>
             </div>
           )}
-
+ 
           {/* Domain selector */}
           {domainProfiles.length > 0 && (
             <div>
@@ -326,7 +327,7 @@ export function SessionSetup({ onSessionStart }: SessionSetupProps) {
               )}
             </div>
           )}
-
+ 
           {/* Role labels */}
           <div className="grid grid-cols-2 gap-3">
             <div>
@@ -346,7 +347,7 @@ export function SessionSetup({ onSessionStart }: SessionSetupProps) {
               />
             </div>
           </div>
-
+ 
           {/* Speed (simulation mode only) */}
           {!isChatMode && (
           <div>
@@ -368,7 +369,7 @@ export function SessionSetup({ onSessionStart }: SessionSetupProps) {
             </div>
           </div>
           )}
-
+ 
           {/* Start button */}
           <button
             onClick={handleStart}

@@ -1,5 +1,5 @@
 from backend.domains.models import DomainProfile
-
+ 
 PROFILE = DomainProfile(
     id="medical",
     name="Medical \u2014 SOCRATES",
@@ -7,6 +7,8 @@ PROFILE = DomainProfile(
     framework="SOCRATES",
     role_labels={"interviewer": "Doctor", "responder": "Patient"},
     gap_categories=[
+        "Age",
+        "Sex",
         "Site",
         "Onset",
         "Character",
@@ -25,7 +27,11 @@ PROFILE = DomainProfile(
     system_prompt_fragment="""\
 You are a medical conversation analyst using the SOCRATES framework for symptom \
 history taking.
-
+ 
+Demographics (must be collected before diving into symptoms):
+- Age: The patient's age in years.
+- Sex: The patient's biological sex (male / female / other).
+ 
 SOCRATES stands for:
 - Site: Where exactly is the symptom?
 - Onset: When did it start? Was it sudden or gradual?
@@ -35,18 +41,21 @@ SOCRATES stands for:
 - Time course: Is it constant or intermittent? Getting better or worse?
 - Exacerbating / relieving factors: What makes it better or worse?
 - Severity: How bad is it on a scale of 1\u201310?
-
+ 
 When analysing the conversation:
-1. Track which SOCRATES categories have been adequately covered by the patient's \
+1. First ensure the patient's age and sex have been recorded. These are essential \
+demographics that inform clinical reasoning and must appear in information_gathered.
+2. Track which SOCRATES categories have been adequately covered by the patient's \
 answers.
-2. Identify gaps \u2014 categories not yet addressed or answered vaguely.
-3. Flag red-flag signals: exertional symptoms, sudden severe onset, radiation to arm/\
+3. Identify gaps \u2014 categories not yet addressed or answered vaguely.
+4. Flag red-flag signals: exertional symptoms, sudden severe onset, radiation to arm/\
 jaw/back, associated syncope, haemodynamic instability, or any feature suggesting a \
 life-threatening condition.
-4. Flag contradictions where the patient gives conflicting information.
-5. Flag vague answers that need clarification ("it hurts sometimes" without specifics).
-
+5. Flag contradictions where the patient gives conflicting information.
+6. Flag vague answers that need clarification ("it hurts sometimes" without specifics).
+ 
 Output the running context as a structured JSON object with keys: \
 core_topic, information_gathered, gaps, signals, turn_count.""",
-    opening_message="Hello, I'm your doctor today. What brings you in?",
+    opening_message="Hello, I'm your doctor today. Before we begin, could you please tell me your name, age, and sex?",
 )
+ 

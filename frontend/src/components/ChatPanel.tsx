@@ -1,14 +1,14 @@
-import { useCallback, useRef, useState } from 'react';
-
+import { useCallback, useEffect, useRef, useState } from 'react';
+ 
 interface ChatPanelProps {
   onSend: (text: string) => void;
   waiting: boolean;
 }
-
+ 
 export function ChatPanel({ onSend, waiting }: ChatPanelProps) {
   const [text, setText] = useState('');
   const inputRef = useRef<HTMLTextAreaElement>(null);
-
+ 
   const handleSend = useCallback(() => {
     const trimmed = text.trim();
     if (!trimmed || waiting) return;
@@ -16,7 +16,13 @@ export function ChatPanel({ onSend, waiting }: ChatPanelProps) {
     setText('');
     inputRef.current?.focus();
   }, [text, waiting, onSend]);
-
+ 
+  useEffect(() => {
+    if (!waiting) {
+      inputRef.current?.focus();
+    }
+  }, [waiting]);
+ 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       if (e.key === 'Enter' && !e.shiftKey) {
@@ -26,7 +32,7 @@ export function ChatPanel({ onSend, waiting }: ChatPanelProps) {
     },
     [handleSend],
   );
-
+ 
   return (
     <div className="flex-shrink-0 border-t border-[#2d3555] bg-[#141927] px-4 py-3">
       <div className="flex items-end gap-2">
