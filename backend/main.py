@@ -229,9 +229,6 @@ async def configure_session(config: SessionConfig):
  
     is_chat = config.mode == "chat"
  
-    if is_chat and not settings.chat_mode_enabled:
-        logger.warning("Chat mode requested but feature flag is disabled")
-        raise HTTPException(status_code=403, detail="Chat mode is not enabled on this server.")
     if is_chat and config.domain != "medical":
         logger.warning("Chat mode requested for unsupported domain '%s'", config.domain)
         raise HTTPException(status_code=400, detail="Chat mode is currently only available for the medical domain.")
@@ -267,6 +264,11 @@ async def configure_session(config: SessionConfig):
     except (LLMError, ImportError) as exc:
         logger.warning("Could not create ContextEngine (LLM not available): %s", exc)
         _context_engine = None
+ 
+    if is_chat:
+        from backend.audio import transcriber
+        logger.info("Chat session — warming up Whisper model in background")
+        asyncio.get_event_loop().run_in_executor(None, transcriber.warmup)
  
     await ws_manager.broadcast({"type": "session_start", "data": config.model_dump()})
  
@@ -376,16 +378,6 @@ async def llm_status() -> dict:
  
  
 # ---------------------------------------------------------------------------
-# REST — Feature Flags
-# ---------------------------------------------------------------------------
- 
-@app.get("/api/features")
-async def get_features() -> dict:
-    """Return feature flags for the frontend."""
-    return {"chat_mode_enabled": settings.chat_mode_enabled}
- 
- 
-# ---------------------------------------------------------------------------
 # REST — Speech-to-Text
 # ---------------------------------------------------------------------------
  
@@ -398,10 +390,17 @@ async def transcribe_audio(file: UploadFile = File(...)):
     try:
         raw = await file.read()
     except Exception as exc:
+        logger.error("Failed to read uploaded audio file: %s", exc)
         raise HTTPException(status_code=400, detail=f"Failed to read uploaded file: {exc}") from exc
  
     if len(raw) == 0:
+        logger.warning("Received empty audio file for transcription")
         raise HTTPException(status_code=400, detail="Uploaded audio file is empty.")
+ 
+    logger.info(
+        "Transcribe request: filename='%s' size=%d bytes",
+        file.filename or "unknown", len(raw),
+    )
  
     tmp = tempfile.NamedTemporaryFile(delete=False, suffix=suffix)
     tmp_path = tmp.name
@@ -410,11 +409,15 @@ async def transcribe_audio(file: UploadFile = File(...)):
         tmp.close()
         text = await asyncio.to_thread(transcriber.transcribe, tmp_path)
     except Exception as exc:
-        logger.exception("Transcription failed")
+        logger.exception("Transcription failed for file '%s'", file.filename)
         raise HTTPException(status_code=500, detail=f"Transcription failed: {exc}") from exc
     finally:
         Path(tmp_path).unlink(missing_ok=True)
  
+    logger.info(
+        "Transcription complete: %d chars from '%s'",
+        len(text), file.filename or "unknown",
+    )
     return {"text": text}
  
  

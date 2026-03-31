@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     transcripts_dir: str = "backend/transcripts"
     cors_origins: list[str] = ["http://localhost:5173", "http://localhost:5174", "http://localhost:3000", "http://127.0.0.1:5173"]
  
-    # LLM provider settings
+    # LLM provider settings 
     llm_provider: str = "claude"
     anthropic_api_key: str = ""
     openai_api_key: str = ""
@@ -36,9 +36,6 @@ class Settings(BaseSettings):
     # Suggestion engine settings
     suggestion_max_count: int = 3               # max suggestions per batch
     suggestion_combined_mode: bool = True        # single LLM call for context+suggestions
- 
-    # Chat mode settings
-    chat_mode_enabled: bool = False              # enable live doctor-patient chat mode
  
     # Speech-to-text (Faster Whisper)
     whisper_model: str = "medium"
