@@ -41,11 +41,59 @@ def warmup() -> None:
     _get_model()
  
  
+_HALLUCINATION_PHRASES = {
+    "thank you for watching",
+    "thanks for watching",
+    "please subscribe",
+    "like and subscribe",
+    "subscribe to my channel",
+    "thank you for listening",
+    "thanks for listening",
+    "see you next time",
+    "see you in the next video",
+    "bye bye",
+    "goodbye",
+    "thank you",
+    "thanks",
+    "you",
+}
+ 
+_MIN_AUDIO_DURATION = 1.0
+_NO_SPEECH_THRESHOLD = 0.6
+ 
+ 
+def _is_hallucination(text: str) -> bool:
+    return text.strip().lower().rstrip(".!?,") in _HALLUCINATION_PHRASES
+ 
+ 
 def transcribe(audio_path: str) -> str:
     """Transcribe an audio file and return the full text."""
     model = _get_model()
-    segments, info = model.transcribe(audio_path, beam_size=5)
-    text = " ".join(seg.text.strip() for seg in segments if seg.text.strip())
+    language = settings.whisper_language or None
+    segments, info = model.transcribe(audio_path, beam_size=5, language=language)
+ 
+    if info.duration < _MIN_AUDIO_DURATION:
+        logger.info(
+            "Audio too short (%.2fs) — skipping transcription", info.duration,
+        )
+        return ""
+ 
+    seg_list = list(segments)
+ 
+    if all(seg.no_speech_prob > _NO_SPEECH_THRESHOLD for seg in seg_list):
+        logger.info(
+            "All segments have high no-speech probability — returning empty",
+        )
+        return ""
+ 
+    text = " ".join(seg.text.strip() for seg in seg_list if seg.text.strip())
+ 
+    if _is_hallucination(text):
+        logger.info(
+            "Filtered hallucinated phrase: '%s'", text,
+        )
+        return ""
+ 
     logger.info(
         "Transcribed %.1fs of audio (%s) → %d chars",
         info.duration, info.language, len(text),

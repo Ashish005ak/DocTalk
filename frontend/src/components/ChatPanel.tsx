@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
  
 const API_BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:8000';
+const MIN_RECORDING_MS = 1500;
  
 interface ChatPanelProps {
   onSend: (text: string) => void;
@@ -17,6 +18,7 @@ export function ChatPanel({ onSend, waiting }: ChatPanelProps) {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
   const streamRef = useRef<MediaStream | null>(null);
+  const recordingStartRef = useRef<number>(0);
  
   const handleSend = useCallback(() => {
     const trimmed = text.trim();
@@ -106,6 +108,7 @@ export function ChatPanel({ onSend, waiting }: ChatPanelProps) {
  
       recorder.start();
       mediaRecorderRef.current = recorder;
+      recordingStartRef.current = Date.now();
       setIsRecording(true);
     } catch {
       setMicError('Microphone access denied');
@@ -115,12 +118,27 @@ export function ChatPanel({ onSend, waiting }: ChatPanelProps) {
  
   const stopRecording = useCallback(() => {
     const recorder = mediaRecorderRef.current;
+    const elapsed = Date.now() - recordingStartRef.current;
+ 
+    if (elapsed < MIN_RECORDING_MS) {
+      if (recorder && recorder.state !== 'inactive') {
+        recorder.ondataavailable = null;
+        recorder.onstop = null;
+        recorder.stop();
+      }
+      stopRecordingTracks();
+      mediaRecorderRef.current = null;
+      setIsRecording(false);
+      setMicError('Recording too short — hold the mic button longer');
+      return;
+    }
+ 
     if (recorder && recorder.state !== 'inactive') {
       recorder.stop();
     }
     mediaRecorderRef.current = null;
     setIsRecording(false);
-  }, []);
+  }, [stopRecordingTracks]);
  
   const toggleRecording = useCallback(() => {
     if (isRecording) {

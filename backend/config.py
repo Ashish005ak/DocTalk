@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     # LLM provider settings 
     llm_provider: str = "claude"
     anthropic_api_key: str = ""
+
     openai_api_key: str = ""
     google_api_key: str = ""
     groq_api_key: str = ""
@@ -39,6 +40,7 @@ class Settings(BaseSettings):
  
     # Speech-to-text (Faster Whisper)
     whisper_model: str = "medium"
+    whisper_language: str = "en"
  
     @property
     def transcripts_path(self) -> Path:
