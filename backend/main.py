@@ -3,12 +3,13 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import tempfile
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
  
-from fastapi import FastAPI, HTTPException, UploadFile, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, File, HTTPException, UploadFile, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
  
 from backend.config import settings
@@ -385,6 +386,39 @@ async def get_features() -> dict:
  
  
 # ---------------------------------------------------------------------------
+# REST — Speech-to-Text
+# ---------------------------------------------------------------------------
+ 
+@app.post("/api/transcribe")
+async def transcribe_audio(file: UploadFile = File(...)):
+    """Transcribe an uploaded audio clip using Faster Whisper."""
+    from backend.audio import transcriber
+ 
+    suffix = Path(file.filename or "audio.webm").suffix or ".webm"
+    try:
+        raw = await file.read()
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail=f"Failed to read uploaded file: {exc}") from exc
+ 
+    if len(raw) == 0:
+        raise HTTPException(status_code=400, detail="Uploaded audio file is empty.")
+ 
+    tmp = tempfile.NamedTemporaryFile(delete=False, suffix=suffix)
+    tmp_path = tmp.name
+    try:
+        tmp.write(raw)
+        tmp.close()
+        text = await asyncio.to_thread(transcriber.transcribe, tmp_path)
+    except Exception as exc:
+        logger.exception("Transcription failed")
+        raise HTTPException(status_code=500, detail=f"Transcription failed: {exc}") from exc
+    finally:
+        Path(tmp_path).unlink(missing_ok=True)
+ 
+    return {"text": text}
+ 
+ 
+# ---------------------------------------------------------------------------
 # WebSocket — /ws
 # ---------------------------------------------------------------------------
  
@@ -549,3 +583,5 @@ async def _handle_ws_action(client_id: str, action: str | None, message: dict[st
             "type": "error",
             "data": {"message": f"Unknown action '{action}'."},
         })
+ 
+ 
