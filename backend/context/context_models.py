@@ -23,3 +23,5 @@ class ContextObject(BaseModel):
     gaps: list[str] = []
     signals: list[Signal] = []
     turn_count: int = 0
+    active_categories: list[str] = []
+    conversation_phase: str = "gathering"

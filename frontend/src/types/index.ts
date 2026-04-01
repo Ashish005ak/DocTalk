@@ -1,7 +1,7 @@
 // ---------------------------------------------------------------------------
 // Core data types — mirror the Python Pydantic models exactly
 // ---------------------------------------------------------------------------
-
+ 
 export interface Utterance {
   id: string;
   timestamp: string; // "HH:MM:SS.mmm"
@@ -9,7 +9,7 @@ export interface Utterance {
   text: string;
   is_preview: boolean;
 }
-
+ 
 export interface TranscriptMeta {
   id: string;
   domain: Domain;
@@ -17,7 +17,7 @@ export interface TranscriptMeta {
   description: string;
   turn_count: number;
 }
-
+ 
 export interface Transcript {
   id: string;
   domain: Domain;
@@ -25,9 +25,9 @@ export interface Transcript {
   description: string;
   utterances: Utterance[];
 }
-
+ 
 export type SessionMode = 'simulation' | 'chat';
-
+ 
 export interface SessionConfig {
   transcript_id?: string;
   domain: string;
@@ -36,7 +36,7 @@ export interface SessionConfig {
   responder_label: string;
   speed: Speed;
 }
-
+ 
 export interface SessionState {
   state: ReplayState;
   transcript_id: string | null;
@@ -45,14 +45,14 @@ export interface SessionState {
   current_turn: number;
   speed: Speed;
 }
-
+ 
 // ---------------------------------------------------------------------------
 // Domain
 // ---------------------------------------------------------------------------
-
+ 
 // Known built-in domains — open string allows any custom domain to pass through
 export type Domain = string;
-
+ 
 export type BuiltinDomain =
   | 'medical'
   | 'legal'
@@ -60,13 +60,13 @@ export type BuiltinDomain =
   | 'journalism'
   | 'ux_research'
   | 'custom';
-
+ 
 export interface DomainStub {
   id: Domain;
   label: string;
   description: string;
 }
-
+ 
 export interface DomainProfile {
   id: string;
   name: string;
@@ -79,23 +79,23 @@ export interface DomainProfile {
   system_prompt_fragment: string;
   opening_message: string;
 }
-
+ 
 // ---------------------------------------------------------------------------
 // Context (Phase 2.3)
 // ---------------------------------------------------------------------------
-
+ 
 export interface InformationItem {
   key: string;
   value: string;
   source_utt: string;
 }
-
+ 
 export interface Signal {
   type: string;
   detail: string;
   source_utt: string;
 }
-
+ 
 export interface ContextObject {
   session_id: string;
   core_topic: string;
@@ -104,43 +104,45 @@ export interface ContextObject {
   gaps: string[];
   signals: Signal[];
   turn_count: number;
+  active_categories: string[];
+  conversation_phase: 'gathering' | 'summary';
 }
-
+ 
 // ---------------------------------------------------------------------------
 // Suggestions (Phase 3)
 // ---------------------------------------------------------------------------
-
+ 
 export interface Suggestion {
   id: string;
   priority: 'high' | 'medium' | 'low';
   question: string;
   rationale: string;
 }
-
+ 
 export interface SuggestionOutput {
   trigger_utt: string;
   context_summary: string;
   suggestions: Suggestion[];
 }
-
+ 
 // ---------------------------------------------------------------------------
 // Replay
 // ---------------------------------------------------------------------------
-
+ 
 export type ReplayState = 'idle' | 'playing' | 'paused' | 'finished';
 export type Speed = 0.5 | 1.0 | 2.0 | 4.0;
-
+ 
 export interface ReplayStateData {
   state: ReplayState;
   turn: number;
   speed: Speed;
   transcript_id: string | null;
 }
-
+ 
 // ---------------------------------------------------------------------------
 // WebSocket message protocol
 // ---------------------------------------------------------------------------
-
+ 
 export type WSMessageType =
   | 'connection_ack'
   | 'utterance_preview'
@@ -152,25 +154,25 @@ export type WSMessageType =
   | 'suggestions_updated'
   | 'ack'
   | 'error';
-
+ 
 export interface WSMessage<T = unknown> {
   type: WSMessageType;
   data?: T;
 }
-
+ 
 export interface WSConnectionAck {
   client_id: string;
   connections: number;
 }
-
+ 
 export interface WSError {
   message: string;
 }
-
+ 
 // ---------------------------------------------------------------------------
 // WebSocket action protocol (client → server)
 // ---------------------------------------------------------------------------
-
+ 
 export type WSAction =
   | { action: 'start' }
   | { action: 'pause' }
@@ -180,3 +182,5 @@ export type WSAction =
   | { action: 'load_transcript'; transcript_id: string }
   | { action: 'use_suggestion'; suggestion_id: string }
   | { action: 'chat_message'; text: string };
+ 
+ 
