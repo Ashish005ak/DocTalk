@@ -1,0 +1,354 @@
+id: general_medicine
+name: "General Medicine — Full Clinical History"
+description: "Comprehensive clinical history taking with LLM-driven reasoning, deterministic red flag detection, and structured conversation flow"
+
+opening_message: >
+  Hello, I'm your AI health assistant. Before we begin, I want to be clear
+  that this is an AI-assisted consultation and does not replace a real doctor.
+  If you're experiencing a medical emergency, please call emergency services immediately.
+
+  With that said, I'm here to help understand your symptoms.
+  Could you start by telling me your name, age, and what's been bothering you?
+
+# --------------------------------------------------------------------------
+# Symptom blocks: lightweight hint lists for early-turn structure.
+# The LLM decides what questions to ask; these provide field-name hints
+# for the response generator and dedup fallback templates.
+# --------------------------------------------------------------------------
+symptom_blocks:
+  - id: chief_complaint
+    name: "Chief Complaint & Demographics"
+    fields:
+      - name: Chief_Complaint
+        hint: "Primary symptom in the patient's own words"
+      - name: Age
+        hint: "Patient's age"
+      - name: Sex
+        hint: "Patient's biological sex"
+      - name: Pregnancy_Status
+        hint: "Pregnancy status if relevant"
+
+  - id: socrates
+    name: "SOCRATES — Symptom Characterisation"
+    fields:
+      - name: Site
+        hint: "Where exactly is the symptom located?"
+      - name: Onset
+        hint: "When did it start? Sudden or gradual?"
+      - name: Character
+        hint: "What does the symptom feel like? (sharp, dull, burning, throbbing)"
+      - name: Radiation
+        hint: "Does the symptom spread anywhere else?"
+      - name: Associations
+        hint: "Any other symptoms that accompany it?"
+      - name: Time_Course
+        hint: "How long has it lasted? Constant or intermittent?"
+      - name: Exacerbating_Relieving
+        hint: "What makes it better or worse?"
+      - name: Severity
+        hint: "How severe on a scale of 1-10?"
+
+  - id: common_symptoms
+    name: "Common Symptom Details"
+    fields:
+      - name: Fever
+        hint: "Do you have a fever? How high? When did it start?"
+      - name: Headache
+        hint: "Do you have a headache? Where exactly? How severe?"
+      - name: Cough
+        hint: "Do you have a cough? Is it dry or productive?"
+      - name: Shortness_of_breath
+        hint: "Any difficulty breathing? At rest or with exertion?"
+      - name: Chest_pain
+        hint: "Any chest pain? What does it feel like?"
+      - name: Nausea
+        hint: "Any nausea or vomiting?"
+      - name: Fatigue
+        hint: "Are you feeling unusually tired or weak?"
+      - name: Dizziness
+        hint: "Any dizziness or lightheadedness?"
+      - name: Rash
+        hint: "Any skin rash or changes?"
+      - name: Pain_elsewhere
+        hint: "Any pain in other areas of the body?"
+      - name: Neck_Stiffness
+        hint: "Any stiffness or difficulty moving your neck?"
+      - name: Photophobia
+        hint: "Any sensitivity to light?"
+      - name: Altered_Consciousness
+        hint: "Any confusion, drowsiness, or altered awareness?"
+      - name: Arm_Pain
+        hint: "Any pain in your arms?"
+      - name: Jaw_Pain
+        hint: "Any pain in your jaw?"
+      - name: Sweating
+        hint: "Any unusual or excessive sweating?"
+      - name: Syncope
+        hint: "Any fainting or near-fainting episodes?"
+      - name: Leg_Swelling
+        hint: "Any swelling in your legs?"
+      - name: Calf_Pain
+        hint: "Any pain in your calves?"
+      - name: Abdominal_Pain
+        hint: "Any abdominal or stomach pain?"
+      - name: Flank_Pain
+        hint: "Any pain in your side or flank area?"
+      - name: Dysuria
+        hint: "Any pain or burning when urinating?"
+      - name: Vomiting
+        hint: "Any vomiting?"
+      - name: Palpitations
+        hint: "Any awareness of your heart beating fast or irregularly?"
+
+  - id: medications
+    name: "Medications & Allergies"
+    fields:
+      - name: Current_Medications
+        hint: "Any prescription, OTC, supplements, or herbal remedies?"
+      - name: Drug_Allergies
+        hint: "Any known drug allergies? What reaction?"
+
+  - id: past_medical
+    name: "Past Medical History"
+    fields:
+      - name: Past_Medical_History
+        hint: "Previous illnesses, surgeries, chronic conditions"
+      - name: Surgical_History
+        hint: "Any past surgeries?"
+
+  - id: family_history
+    name: "Family History"
+    fields:
+      - name: Family_History
+        hint: "Relevant conditions in first-degree relatives"
+
+  - id: social_history
+    name: "Social History"
+    fields:
+      - name: Social_History
+        hint: "Living situation, support network, functional status"
+      - name: Occupation
+        hint: "Current occupation — relevant for exposures, stress"
+      - name: Smoking
+        hint: "Smoking status and quantity"
+      - name: Alcohol
+        hint: "Alcohol intake — frequency and amount"
+      - name: Substance_Use
+        hint: "Any recreational drug use?"
+
+  - id: infectious_history
+    name: "Epidemiological History"
+    fields:
+      - name: Travel_History
+        hint: "Recent travel, especially to endemic areas"
+      - name: Exposure_History
+        hint: "Exposure to sick contacts, animals, environmental hazards"
+      - name: Contact_History
+        hint: "Close contacts with similar symptoms"
+
+  - id: systems_review
+    name: "Systems Review"
+    fields:
+      - name: Systems_Review
+        hint: "Brief screen of other organ systems"
+      - name: Vitals_Approximation
+        hint: "Home-measured temperature, heart rate, blood pressure if available"
+
+# --------------------------------------------------------------------------
+# Red flags: deterministic rules checked every turn.
+# --------------------------------------------------------------------------
+red_flags:
+  - id: meningitis_triad
+    name: "Meningitis Triad"
+    required_keys:
+      - "Fever"
+    at_least_one_of:
+      - "Neck_Stiffness"
+      - "Photophobia"
+      - "Altered_Consciousness"
+    qualifiers:
+      Fever: ["high", "high fever", ">103", ">39"]
+    message: "These symptoms together raise concern for meningitis. Please seek emergency medical evaluation immediately."
+    severity: critical
+    soft_threshold: 1
+    hard_threshold: 4
+
+  - id: acute_mi_pattern
+    name: "Acute MI Pattern"
+    required_keys:
+      - "Chest_pain"
+    at_least_one_of:
+      - "Arm_Pain"
+      - "Jaw_Pain"
+      - "Sweating"
+      - "Nausea"
+    qualifiers:
+      Chest_pain: ["crushing", "pressure", "heavy", "radiating"]
+    message: "These symptoms may indicate a heart attack. Call emergency services (911) immediately."
+    severity: critical
+    soft_threshold: 2
+    hard_threshold: 3
+
+  - id: subarachnoid_haemorrhage
+    name: "Subarachnoid Haemorrhage"
+    required_keys:
+      - "Headache"
+    at_least_one_of:
+      - "Onset"
+    qualifiers:
+      Headache: ["worst ever", "thunderclap", "worst of my life", "severe", "worst headache"]
+      Onset: ["sudden", "thunderclap", "abrupt"]
+    message: "A sudden, severe headache that is the worst you've ever experienced needs emergency evaluation to rule out bleeding in the brain."
+    severity: critical
+    soft_threshold: 1
+    hard_threshold: 2
+
+  - id: pulmonary_embolism_pattern
+    name: "Pulmonary Embolism Pattern"
+    required_keys:
+      - "Shortness_of_breath"
+    at_least_one_of:
+      - "Chest_pain"
+      - "Leg_Swelling"
+      - "Calf_Pain"
+    qualifiers: {}
+    message: "These symptoms together raise concern for a blood clot in the lung. Please seek emergency medical evaluation."
+    severity: critical
+    soft_threshold: 1
+    hard_threshold: 3
+
+  - id: stroke_pattern
+    name: "Stroke Pattern"
+    required_keys: []
+    at_least_one_of:
+      - "Altered_Consciousness"
+    qualifiers: {}
+    message: "These symptoms may indicate a stroke. Call emergency services immediately — time is critical."
+    severity: critical
+    soft_threshold: 1
+    hard_threshold: 2
+
+  - id: surgical_abdomen
+    name: "Surgical Abdomen"
+    required_keys:
+      - "Abdominal_Pain"
+    at_least_one_of: []
+    qualifiers: {}
+    message: "These symptoms may indicate a surgical emergency. Please seek immediate medical evaluation."
+    severity: critical
+    soft_threshold: 1
+    hard_threshold: 3
+
+  - id: pyelonephritis_urosepsis
+    name: "Pyelonephritis / Urosepsis"
+    required_keys:
+      - "Fever"
+      - "Flank_Pain"
+    at_least_one_of:
+      - "Dysuria"
+      - "Vomiting"
+    qualifiers: {}
+    message: "Fever with flank pain and urinary symptoms may indicate a kidney infection requiring urgent treatment."
+    severity: critical
+    soft_threshold: 1
+    hard_threshold: 4
+
+  - id: dengue_meningococcaemia
+    name: "Dengue / Meningococcaemia"
+    required_keys:
+      - "Fever"
+      - "Rash"
+    at_least_one_of: []
+    qualifiers: {}
+    message: "Fever with rash and bleeding/bruising needs emergency evaluation to rule out serious infections."
+    severity: critical
+    soft_threshold: 1
+    hard_threshold: 2
+
+  - id: cardiac_syncope
+    name: "Cardiac Syncope"
+    required_keys:
+      - "Syncope"
+    at_least_one_of:
+      - "Palpitations"
+      - "Chest_pain"
+    qualifiers: {}
+    message: "Fainting during exertion or with heart symptoms requires urgent cardiac evaluation."
+    severity: critical
+    soft_threshold: 1
+    hard_threshold: 3
+
+# --------------------------------------------------------------------------
+# Jargon map: medical terms -> plain English replacements.
+# --------------------------------------------------------------------------
+jargon_map:
+  dyspnea: "difficulty breathing"
+  myalgia: "muscle aches"
+  cephalgia: "headache"
+  pyrexia: "fever"
+  tachycardia: "fast heart rate"
+  bradycardia: "slow heart rate"
+  hypotension: "low blood pressure"
+  hypertension: "high blood pressure"
+  oedema: "swelling"
+  edema: "swelling"
+  syncope: "fainting"
+  diaphoresis: "excessive sweating"
+  emesis: "vomiting"
+  haemoptysis: "coughing up blood"
+  hemoptysis: "coughing up blood"
+  haematuria: "blood in urine"
+  hematuria: "blood in urine"
+  dysuria: "painful urination"
+  epistaxis: "nosebleed"
+  petechiae: "tiny red/purple spots on skin"
+  rigors: "severe shaking chills"
+  malaise: "general feeling of being unwell"
+  lethargy: "extreme tiredness"
+  photophobia: "sensitivity to light"
+  phonophobia: "sensitivity to sound"
+  arthralgia: "joint pain"
+  pleuritic: "sharp pain that worsens with breathing"
+  pruritus: "itching"
+  erythema: "redness"
+  pallor: "paleness"
+  cyanosis: "bluish discolouration of skin"
+  stridor: "high-pitched breathing sound"
+  wheezing: "whistling sound when breathing"
+  orthopnea: "difficulty breathing when lying flat"
+
+# --------------------------------------------------------------------------
+# Conversation controls.
+# --------------------------------------------------------------------------
+thresholds:
+  max_turns: 30
+  max_gap_asks: 2
+  watch_turns_limit: 5
+
+# --------------------------------------------------------------------------
+# Dedup fallback templates.
+# --------------------------------------------------------------------------
+dedup_fallback:
+  with_target: >
+    I appreciate your patience. To help me better understand your situation,
+    could you share more details about your {target_gap}{hint_suffix}?
+  without_target: >
+    Thank you for sharing all of that.
+    Is there anything else about your health that you think I should know?
+
+# --------------------------------------------------------------------------
+# Values the fact extractor should treat as "the patient didn't answer".
+# --------------------------------------------------------------------------
+placeholder_values:
+  - "not specified"
+  - "not provided"
+  - "not mentioned"
+  - "n/a"
+  - "na"
+  - "none"
+  - "unknown"
+  - "not applicable"
+  - "not stated"
+  - "not given"
+  - "not reported"
+  - "not available"

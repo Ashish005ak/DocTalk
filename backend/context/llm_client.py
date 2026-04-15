@@ -9,6 +9,8 @@ import time
 from typing import Any
 
 from backend.config import settings
+from backend.cost.context import current_caller, current_session_id
+from backend.cost.tracker import cost_tracker
 
 logger = logging.getLogger(__name__)
 
@@ -225,6 +227,13 @@ class ClaudeClient(LLMClient):
                 )
             if usage and usage.output_tokens:
                 LLMMetrics.total_output_tokens += usage.output_tokens
+            cost_tracker.log_call(
+                session_id=current_session_id.get(),
+                caller=current_caller.get(),
+                model=self._model,
+                prompt_tokens=usage.input_tokens if usage else 0,
+                completion_tokens=usage.output_tokens if usage else 0,
+            )
             return resp.content[0].text
 
         return await _retry_with_backoff(
@@ -299,6 +308,13 @@ class OpenAIClient(LLMClient):
                 )
             if usage and usage.completion_tokens:
                 LLMMetrics.total_output_tokens += usage.completion_tokens
+            cost_tracker.log_call(
+                session_id=current_session_id.get(),
+                caller=current_caller.get(),
+                model=self._model,
+                prompt_tokens=usage.prompt_tokens if usage else 0,
+                completion_tokens=usage.completion_tokens if usage else 0,
+            )
             return resp.choices[0].message.content or ""
 
         return await _retry_with_backoff(
@@ -377,6 +393,16 @@ class GeminiClient(LLMClient):
                 )
             if token_count:
                 LLMMetrics.total_output_tokens += token_count
+            prompt_tok = 0
+            if hasattr(resp, "usage_metadata") and resp.usage_metadata:
+                prompt_tok = getattr(resp.usage_metadata, "prompt_token_count", 0) or 0
+            cost_tracker.log_call(
+                session_id=current_session_id.get(),
+                caller=current_caller.get(),
+                model=self._model_name,
+                prompt_tokens=prompt_tok,
+                completion_tokens=token_count or 0,
+            )
             return resp.text
 
         return await _retry_with_backoff(
@@ -451,6 +477,13 @@ class GroqClient(LLMClient):
                 )
             if usage and usage.completion_tokens:
                 LLMMetrics.total_output_tokens += usage.completion_tokens
+            cost_tracker.log_call(
+                session_id=current_session_id.get(),
+                caller=current_caller.get(),
+                model=self._model,
+                prompt_tokens=usage.prompt_tokens if usage else 0,
+                completion_tokens=usage.completion_tokens if usage else 0,
+            )
             return resp.choices[0].message.content or ""
 
         return await _retry_with_backoff(

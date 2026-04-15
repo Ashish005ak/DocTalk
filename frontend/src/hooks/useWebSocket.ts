@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { WSAction, WSMessage } from '../types';
+import type { WSAgentMessage } from '../types';
 
-const WS_URL = import.meta.env.VITE_WS_URL ?? 'ws://localhost:8000/ws';
+const WS_BASE = import.meta.env.VITE_WS_URL ?? 'ws://localhost:8000/ws';
 
 export type ConnectionState = 'connecting' | 'connected' | 'disconnected' | 'error';
 
 interface UseWebSocketReturn {
   connectionState: ConnectionState;
-  lastMessage: WSMessage | null;
-  send: (action: WSAction) => void;
+  isThinking: boolean;
+  send: (text: string) => void;
   reconnect: () => void;
 }
 
@@ -17,7 +17,8 @@ const MAX_RETRY_DELAY_MS = 16000;
 const MAX_RETRIES = 10;
 
 export function useWebSocket(
-  onMessage?: (msg: WSMessage) => void,
+  sessionId: string | null,
+  onMessage?: (msg: WSAgentMessage) => void,
 ): UseWebSocketReturn {
   const wsRef = useRef<WebSocket | null>(null);
   const retryCountRef = useRef(0);
@@ -27,7 +28,7 @@ export function useWebSocket(
   onMessageRef.current = onMessage;
 
   const [connectionState, setConnectionState] = useState<ConnectionState>('disconnected');
-  const [lastMessage, setLastMessage] = useState<WSMessage | null>(null);
+  const [isThinking, setIsThinking] = useState(false);
 
   const clearRetryTimer = () => {
     if (retryTimerRef.current) {
@@ -37,12 +38,12 @@ export function useWebSocket(
   };
 
   const connect = useCallback(() => {
-    if (!isMountedRef.current) return;
+    if (!isMountedRef.current || !sessionId) return;
     if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) return;
 
     setConnectionState('connecting');
 
-    const ws = new WebSocket(WS_URL);
+    const ws = new WebSocket(`${WS_BASE}/${sessionId}`);
     wsRef.current = ws;
 
     ws.onopen = () => {
@@ -54,8 +55,14 @@ export function useWebSocket(
     ws.onmessage = (event: MessageEvent) => {
       if (!isMountedRef.current) return;
       try {
-        const msg: WSMessage = JSON.parse(event.data as string);
-        setLastMessage(msg);
+        const msg: WSAgentMessage = JSON.parse(event.data as string);
+
+        if (msg.type === 'thinking') {
+          setIsThinking(true);
+        } else if (msg.type === 'response' || msg.type === 'error') {
+          setIsThinking(false);
+        }
+
         onMessageRef.current?.(msg);
       } catch {
         // Ignore malformed messages
@@ -70,6 +77,7 @@ export function useWebSocket(
     ws.onclose = () => {
       if (!isMountedRef.current) return;
       setConnectionState('disconnected');
+      setIsThinking(false);
       wsRef.current = null;
 
       if (retryCountRef.current < MAX_RETRIES) {
@@ -83,26 +91,29 @@ export function useWebSocket(
         }, delay);
       }
     };
-  }, []);
+  }, [sessionId]);
 
-  // Connect on mount, disconnect on unmount
   useEffect(() => {
     isMountedRef.current = true;
-    connect();
+
+    if (sessionId) {
+      connect();
+    }
+
     return () => {
       isMountedRef.current = false;
       clearRetryTimer();
       if (wsRef.current) {
-        wsRef.current.onclose = null; // Prevent retry on intentional close
+        wsRef.current.onclose = null;
         wsRef.current.close();
         wsRef.current = null;
       }
     };
-  }, [connect]);
+  }, [connect, sessionId]);
 
-  const send = useCallback((action: WSAction) => {
+  const send = useCallback((text: string) => {
     if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-      wsRef.current.send(JSON.stringify(action));
+      wsRef.current.send(JSON.stringify({ text }));
     }
   }, []);
 
@@ -117,5 +128,5 @@ export function useWebSocket(
     connect();
   }, [connect]);
 
-  return { connectionState, lastMessage, send, reconnect };
+  return { connectionState, isThinking, send, reconnect };
 }

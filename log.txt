@@ -1,0 +1,939 @@
+(base) PS C:\Users\ashish\Downloads\DocTalk (3)\DocTalk> python -m uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
+INFO:     Will watch for changes in these directories: ['C:\\Users\\ashish\\Downloads\\DocTalk (3)\\DocTalk']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [40848] using WatchFiles
+INFO:     Started server process [52128]
+INFO:     Waiting for application startup.
+2026-04-15 09:48:12,900  INFO  backend.main  DocTalk API starting  port=8000  default_domain=general_medicine  llm_provider=openai
+INFO:     Application startup complete.
+2026-04-15 09:48:46,817  INFO  backend.domain.loader  Loaded domain 'general_medicine': 9 blocks, 9 red flags, 34 jargon entries
+2026-04-15 09:48:46,818  INFO  backend.session.manager  SESSION_DOMAIN_CACHED  domain_id=general_medicine
+2026-04-15 09:48:48,572  INFO  backend.context.llm_client  OpenAIClient initialized: model='gpt-4.1-mini' temperature=0.2
+2026-04-15 09:48:48,574  INFO  backend.context.llm_client  LLM client created: provider='openai'
+2026-04-15 09:48:48,575  INFO  backend.llm.client  AgentLLMClient ready  provider=openai  model=gpt-4.1-mini
+2026-04-15 09:48:48,576  INFO  backend.session.manager  SESSION_CLIENT_INIT  provider=openai
+2026-04-15 09:48:48,583  INFO  backend.agent.graph  GRAPH_BUILD  nodes=6  domain=general_medicine  checkpointer=MemorySaver
+2026-04-15 09:48:48,586  INFO  backend.cost.tracker  COST_TRACKER  register  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  domain=general_medicine
+2026-04-15 09:48:48,587  INFO  backend.session.manager  SESSION_CREATE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  domain_id=general_medicine  active=1
+2026-04-15 09:48:48,588  INFO  backend.api.routes  ROUTE_SESSION_CREATE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  domain_id=general_medicine
+INFO:     127.0.0.1:59614 - "POST /api/session?domain_id=general_medicine HTTP/1.1" 200 OK
+INFO:     ('127.0.0.1', 52478) - "WebSocket /ws/0aeb7ea6777e45a1a76565b5f15ff36a" [accepted]
+2026-04-15 09:48:48,924  INFO  backend.api.websocket  WS_CONNECT  session_id=0aeb7ea6777e45a1a76565b5f15ff36a
+INFO:     connection open
+2026-04-15 09:50:14,134  INFO  backend.api.websocket  WS_MESSAGE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  message_len=112
+2026-04-15 09:50:14,152  INFO  backend.agent.nodes.intake  INTAKE_ENTRY  message_len=112  last_gap=(none)  existing_facts=0
+2026-04-15 09:50:14,152  INFO  backend.llm.intent_classifier  INTENT_REQ  message_len=112  last_gap=(none)
+2026-04-15 09:50:14,990  INFO  backend.llm.fact_extractor  EXTRACT_REQ  message_len=112  last_topic=(none)  existing_facts=0
+2026-04-15 09:50:17,152  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:50:17,174  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=3021ms  in=289  out=2  finish_reason=stop  max_tokens=10
+2026-04-15 09:50:17,175  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=intent_classifier  model=gpt-4.1-mini  in=289  out=2  cost=$0.00011880
+2026-04-15 09:50:17,175  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 2 | Successes: 1 | Retries: 0 | Failures: 0 | Total Output Tokens: 2
+2026-04-15 09:50:17,180  INFO  backend.llm.client  LLM_CALL  caller=intent_classifier          provider=openai    model=gpt-4.1-mini                    status=OK  latency=   3027ms  in_tokens=303     out_tokens=2       cost=$0.000124  max_tokens=10
+2026-04-15 09:50:17,181  INFO  backend.llm.intent_classifier  INTENT_RAW  raw_response='greeting'  parsed='greeting'
+2026-04-15 09:50:17,182  INFO  backend.llm.intent_classifier  INTENT_OK  result=greeting
+2026-04-15 09:50:18,280  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:50:18,309  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=3318ms  in=306  out=136  finish_reason=stop  max_tokens=512
+2026-04-15 09:50:18,312  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=fact_extractor  model=gpt-4.1-mini  in=306  out=136  cost=$0.00034000
+2026-04-15 09:50:18,313  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 2 | Successes: 2 | Retries: 0 | Failures: 0 | Total Output Tokens: 138
+2026-04-15 09:50:18,313  INFO  backend.llm.client  LLM_CALL  caller=fact_extractor             provider=openai    model=gpt-4.1-mini                    status=OK  latency=   3321ms  in_tokens=293     out_tokens=104     cost=$0.000284  max_tokens=512
+2026-04-15 09:50:18,313  INFO  backend.llm.fact_extractor  EXTRACT_RAW  response='[{"key": "Hairfall", "value": "suffering from hairfall", "denied": false, "confidence": "high"}, {"key": "Weight_Gain", "value": "weight gain", "denied": false, "confidence": "high"}, {"key": "Acne", "value": "sudden increase in acne", "denied": false, "confidence": "high"}, {"key": "Age", "value": "21", "denied": false, "confidence": "high"}, {"key": "Sex", "value": "female", "denied": false, "confidence": "high"}]'
+2026-04-15 09:50:18,314  INFO  backend.llm.fact_extractor  EXTRACT_OK  facts_count=5  facts=[('Hairfall', 'suffering from hairfall', 'high'), ('Weight_Gain', 'weight gain', 'high'), ('Acne', 'sudden increase in acne', 'high'), ('Age', '21', 'high'), ('Sex', 'female', 'high')]
+2026-04-15 09:50:18,315  INFO  backend.agent.nodes.intake  INTAKE_INTENT  result=greeting
+2026-04-15 09:50:18,317  INFO  backend.agent.nodes.intake  INTAKE_FACTS  count=5  keys=['Hairfall', 'Weight_Gain', 'Acne', 'Age', 'Sex']
+2026-04-15 09:50:18,319  INFO  backend.agent.nodes.intake  INTAKE_EXIT  intent=greeting  fact_count=5  volunteered=5  pending_explanation=False
+2026-04-15 09:50:18,320  INFO  backend.agent.routing  ROUTE_DECISION  intent=greeting  destination=reason
+2026-04-15 09:50:18,323  INFO  backend.agent.nodes.reason  REASON_ENTRY  turn=0  phase=intake  intake_facts=5  info_count=0
+2026-04-15 09:50:18,324  INFO  backend.agent.nodes.reason  REASON_MERGE  new_denied=[]  info_count=5  unconfirmed=0
+2026-04-15 09:50:18,324  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=meningitis_triad  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:50:18,324  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=acute_mi_pattern  score=0  soft=2  hard=3  state=clear
+2026-04-15 09:50:18,325  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=subarachnoid_haemorrhage  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:50:18,325  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pulmonary_embolism_pattern  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:50:18,325  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=stroke_pattern  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:50:18,325  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=surgical_abdomen  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:50:18,325  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pyelonephritis_urosepsis  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:50:18,326  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=dengue_meningococcaemia  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:50:18,326  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=cardiac_syncope  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:50:18,327  INFO  backend.llm.clinical_reasoner  REASONER_REQ  turn=0  info_count=5
+2026-04-15 09:50:23,265  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:50:23,279  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=4951ms  in=395  out=400  finish_reason=stop  max_tokens=512
+2026-04-15 09:50:23,283  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=clinical_reasoner  model=gpt-4.1-mini  in=395  out=400  cost=$0.00079800
+2026-04-15 09:50:23,283  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 3 | Successes: 3 | Retries: 0 | Failures: 0 | Total Output Tokens: 538
+2026-04-15 09:50:23,284  INFO  backend.llm.client  LLM_CALL  caller=clinical_reasoner          provider=openai    model=gpt-4.1-mini                    status=OK  latency=   4957ms  in_tokens=445     out_tokens=395     cost=$0.000810  max_tokens=512
+2026-04-15 09:50:23,285  INFO  backend.llm.clinical_reasoner  REASONER_RAW  response_len=1580
+2026-04-15 09:50:23,285  INFO  backend.llm.clinical_reasoner  REASONER_OK  hypotheses=5  top=Polycystic Ovary Syndrome (PCOS)(0.50)  next_q=menstrual history  confidence=moderate  summarize=False
+2026-04-15 09:50:23,286  INFO  backend.agent.nodes.reason  REASON_HYPOTHESIS  leading=Polycystic Ovary Syndrome (PCOS)  score=0.500  differential=4  ruled_out=0
+2026-04-15 09:50:23,286  INFO  backend.agent.nodes.reason  REASON_EXIT  phase=intake  info=5  gaps=['menstrual history']  hypothesis=Polycystic Ovary Syndrome (PCOS)(0.500)  confidence=moderate
+2026-04-15 09:50:23,290  INFO  backend.agent.nodes.flow_control  FLOW_ENTRY  phase=intake  intent=greeting  info_count=5  gaps=1  confirmed_rf=0  ending=none  closing_turn=0
+2026-04-15 09:50:23,291  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=meningitis_triad  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:50:23,291  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=acute_mi_pattern  score=0  soft=2  hard=3  state=clear
+2026-04-15 09:50:23,291  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=subarachnoid_haemorrhage  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:50:23,292  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pulmonary_embolism_pattern  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:50:23,292  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=stroke_pattern  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:50:23,292  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=surgical_abdomen  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:50:23,292  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pyelonephritis_urosepsis  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:50:23,293  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=dengue_meningococcaemia  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:50:23,293  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=cardiac_syncope  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:50:23,293  INFO  backend.agent.nodes.flow_control  FLOW_MOVE  type=question  target=menstrual history  ask_count=1
+2026-04-15 09:50:23,297  INFO  backend.agent.nodes.response_gen  RESPONSE_GEN_ENTRY  move_type=question  pending_explanation=False  intent=greeting
+2026-04-15 09:50:23,297  INFO  backend.llm.response_generator  RESPONSE_REQ  move_type=question  target_gap=menstrual history  red_flag_id=(none)
+2026-04-15 09:50:24,142  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:50:24,164  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=866ms  in=182  out=39  finish_reason=stop  max_tokens=200
+2026-04-15 09:50:24,165  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=response_generator  model=gpt-4.1-mini  in=182  out=39  cost=$0.00013520
+2026-04-15 09:50:24,167  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 4 | Successes: 4 | Retries: 0 | Failures: 0 | Total Output Tokens: 577
+2026-04-15 09:50:24,169  INFO  backend.llm.client  LLM_CALL  caller=response_generator         provider=openai    model=gpt-4.1-mini                    status=OK  latency=    871ms  in_tokens=195     out_tokens=46      cost=$0.000152  max_tokens=200
+2026-04-15 09:50:24,170  INFO  backend.llm.response_generator  RESPONSE_RAW  response='Thank you for sharing that with me. To better understand your situation, could you tell me about your menstrual cycle? For example, is it regular, and how many days does it usually last?'
+2026-04-15 09:50:24,171  INFO  backend.llm.response_generator  RESPONSE_OK  move_type=question  len=186
+2026-04-15 09:50:24,171  INFO  backend.agent.nodes.response_gen  RESPONSE_GEN_EXIT  response_len=186  was_blended=False
+2026-04-15 09:50:24,174  INFO  backend.agent.nodes.safety  SAFETY_ENTRY  response_len=186  turn=0  questions_asked=0
+2026-04-15 09:50:24,174  INFO  backend.agent.nodes.safety  SAFETY_BANNED  stripped_opener  original_len=186  new_len=159
+2026-04-15 09:50:24,178  INFO  backend.agent.nodes.safety  SAFETY_ESCALATION_CHECK  info_count=5  keys=['Hairfall', 'Weight_Gain', 'Acne', 'Age', 'Sex']
+2026-04-15 09:50:25,108  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:50:25,120  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=941ms  in=106  out=13  finish_reason=stop  max_tokens=60
+2026-04-15 09:50:25,121  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=safety.escalation_check  model=gpt-4.1-mini  in=106  out=13  cost=$0.00006320
+2026-04-15 09:50:25,122  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 5 | Successes: 5 | Retries: 0 | Failures: 0 | Total Output Tokens: 590
+2026-04-15 09:50:25,122  INFO  backend.llm.client  LLM_CALL  caller=safety.escalation_check    provider=openai    model=gpt-4.1-mini                    status=OK  latency=    943ms  in_tokens=105     out_tokens=18      cost=$0.000071  max_tokens=60
+2026-04-15 09:50:25,123  INFO  backend.agent.nodes.safety  SAFETY_ESCALATION_RESULT  decision=NO  reason='The symptoms described do not indicate an immediate medical emergency.'
+2026-04-15 09:50:25,123  INFO  backend.agent.nodes.safety  SAFETY_EXIT  final_len=159  turn=1  new_questions=2  last_question=menstrual history
+2026-04-15 09:50:25,126  INFO  backend.session.manager  SESSION_MESSAGE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  message_len=112  response_len=159  phase=intake  turn=1
+2026-04-15 09:50:25,127  INFO  backend.api.websocket  WS_RESPONSE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  response_len=159  phase=intake
+2026-04-15 09:51:04,685  INFO  backend.api.websocket  WS_MESSAGE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  message_len=71
+2026-04-15 09:51:04,694  INFO  backend.agent.nodes.intake  INTAKE_ENTRY  message_len=71  last_gap=menstrual history  existing_facts=5
+2026-04-15 09:51:04,695  INFO  backend.llm.intent_classifier  INTENT_REQ  message_len=71  last_gap=menstrual history
+2026-04-15 09:51:04,699  INFO  backend.llm.fact_extractor  EXTRACT_REQ  message_len=71  last_topic=menstrual history  existing_facts=5
+2026-04-15 09:51:05,233  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:51:05,234  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=539ms  in=279  out=2  finish_reason=stop  max_tokens=10
+2026-04-15 09:51:05,235  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=intent_classifier  model=gpt-4.1-mini  in=279  out=2  cost=$0.00011480
+2026-04-15 09:51:05,235  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 7 | Successes: 6 | Retries: 0 | Failures: 0 | Total Output Tokens: 592
+2026-04-15 09:51:05,235  INFO  backend.llm.client  LLM_CALL  caller=intent_classifier          provider=openai    model=gpt-4.1-mini                    status=OK  latency=    540ms  in_tokens=297     out_tokens=2       cost=$0.000122  max_tokens=10
+2026-04-15 09:51:05,235  INFO  backend.llm.intent_classifier  INTENT_RAW  raw_response='answering'  parsed='answering'
+2026-04-15 09:51:05,236  INFO  backend.llm.intent_classifier  INTENT_OK  result=answering
+2026-04-15 09:51:05,905  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:51:05,914  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=1213ms  in=320  out=70  finish_reason=stop  max_tokens=512
+2026-04-15 09:51:05,915  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=fact_extractor  model=gpt-4.1-mini  in=320  out=70  cost=$0.00024000
+2026-04-15 09:51:05,915  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 7 | Successes: 7 | Retries: 0 | Failures: 0 | Total Output Tokens: 662
+2026-04-15 09:51:05,915  INFO  backend.llm.client  LLM_CALL  caller=fact_extractor             provider=openai    model=gpt-4.1-mini                    status=OK  latency=   1216ms  in_tokens=309     out_tokens=53      cost=$0.000208  max_tokens=512
+2026-04-15 09:51:05,915  INFO  backend.llm.fact_extractor  EXTRACT_RAW  response='[{"key": "Menstrual_Regularity", "value": "regular, but it might vary from 2 - 3 days", "denied": false, "confidence": "high"}, {"key": "Menstrual_Bleeding", "value": "heavy", "denied": false, "confidence": "high"}]'
+2026-04-15 09:51:05,916  INFO  backend.llm.fact_extractor  EXTRACT_OK  facts_count=2  facts=[('Menstrual_Regularity', 'regular, but it might vary from 2 - 3 days', 'high'), ('Menstrual_Bleeding', 'heavy', 'high')]
+2026-04-15 09:51:05,916  INFO  backend.agent.nodes.intake  INTAKE_INTENT  result=answering
+2026-04-15 09:51:05,916  INFO  backend.agent.nodes.intake  INTAKE_FACTS  count=2  keys=['Menstrual_Regularity', 'Menstrual_Bleeding']
+2026-04-15 09:51:05,916  INFO  backend.agent.nodes.intake  INTAKE_EXIT  intent=answering  fact_count=2  volunteered=2  pending_explanation=False
+2026-04-15 09:51:05,916  INFO  backend.agent.routing  ROUTE_DECISION  intent=answering  destination=reason
+2026-04-15 09:51:05,918  INFO  backend.agent.nodes.reason  REASON_ENTRY  turn=1  phase=intake  intake_facts=2  info_count=5
+2026-04-15 09:51:05,918  INFO  backend.agent.nodes.reason  REASON_MERGE  new_denied=[]  info_count=7  unconfirmed=0
+2026-04-15 09:51:05,918  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=meningitis_triad  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:51:05,918  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=acute_mi_pattern  score=0  soft=2  hard=3  state=clear
+2026-04-15 09:51:05,918  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=subarachnoid_haemorrhage  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:51:05,918  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pulmonary_embolism_pattern  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:51:05,919  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=stroke_pattern  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:51:05,919  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=surgical_abdomen  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:51:05,919  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pyelonephritis_urosepsis  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:51:05,919  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=dengue_meningococcaemia  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:51:05,919  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=cardiac_syncope  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:51:05,919  INFO  backend.llm.clinical_reasoner  REASONER_REQ  turn=1  info_count=7
+2026-04-15 09:51:10,662  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:51:10,684  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=4764ms  in=586  out=410  finish_reason=stop  max_tokens=512
+2026-04-15 09:51:10,686  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=clinical_reasoner  model=gpt-4.1-mini  in=586  out=410  cost=$0.00089040
+2026-04-15 09:51:10,687  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 8 | Successes: 8 | Retries: 0 | Failures: 0 | Total Output Tokens: 1072
+2026-04-15 09:51:10,688  INFO  backend.llm.client  LLM_CALL  caller=clinical_reasoner          provider=openai    model=gpt-4.1-mini                    status=OK  latency=   4768ms  in_tokens=636     out_tokens=408     cost=$0.000907  max_tokens=512
+2026-04-15 09:51:10,688  INFO  backend.llm.clinical_reasoner  REASONER_RAW  response_len=1635
+2026-04-15 09:51:10,689  INFO  backend.llm.clinical_reasoner  REASONER_OK  hypotheses=5  top=Polycystic Ovary Syndrome (PCOS)(0.55)  next_q=weight distribution  confidence=moderate  summarize=False
+2026-04-15 09:51:10,689  INFO  backend.agent.nodes.reason  REASON_HYPOTHESIS  leading=Polycystic Ovary Syndrome (PCOS)  score=0.550  differential=3  ruled_out=1
+2026-04-15 09:51:10,689  INFO  backend.agent.nodes.reason  REASON_PHASE  transition  intake -> narrowing
+2026-04-15 09:51:10,690  INFO  backend.agent.nodes.reason  REASON_EXIT  phase=narrowing  info=7  gaps=['weight distribution']  hypothesis=Polycystic Ovary Syndrome (PCOS)(0.550)  confidence=moderate
+2026-04-15 09:51:10,695  INFO  backend.agent.nodes.flow_control  FLOW_ENTRY  phase=narrowing  intent=answering  info_count=7  gaps=1  confirmed_rf=0  ending=none  closing_turn=0
+2026-04-15 09:51:10,695  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=meningitis_triad  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:51:10,696  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=acute_mi_pattern  score=0  soft=2  hard=3  state=clear
+2026-04-15 09:51:10,696  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=subarachnoid_haemorrhage  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:51:10,696  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pulmonary_embolism_pattern  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:51:10,696  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=stroke_pattern  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:51:10,697  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=surgical_abdomen  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:51:10,698  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pyelonephritis_urosepsis  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:51:10,699  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=dengue_meningococcaemia  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:51:10,699  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=cardiac_syncope  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:51:10,700  INFO  backend.agent.nodes.flow_control  FLOW_MOVE  type=question  target=weight distribution  ask_count=1
+2026-04-15 09:51:10,705  INFO  backend.agent.nodes.response_gen  RESPONSE_GEN_ENTRY  move_type=question  pending_explanation=False  intent=answering
+2026-04-15 09:51:10,706  INFO  backend.llm.response_generator  RESPONSE_REQ  move_type=question  target_gap=weight distribution  red_flag_id=(none)
+2026-04-15 09:51:11,925  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:51:11,926  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=1220ms  in=230  out=39  finish_reason=stop  max_tokens=200
+2026-04-15 09:51:11,928  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=response_generator  model=gpt-4.1-mini  in=230  out=39  cost=$0.00015440
+2026-04-15 09:51:11,928  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 9 | Successes: 9 | Retries: 0 | Failures: 0 | Total Output Tokens: 1111
+2026-04-15 09:51:11,930  INFO  backend.llm.client  LLM_CALL  caller=response_generator         provider=openai    model=gpt-4.1-mini                    status=OK  latency=   1223ms  in_tokens=238     out_tokens=47      cost=$0.000170  max_tokens=200
+2026-04-15 09:51:11,930  INFO  backend.llm.response_generator  RESPONSE_RAW  response="I understand you've been experiencing some weight gain. Could you tell me where you’ve noticed the weight mostly adding up? For example, around your belly, your hips, or more evenly all over?"
+2026-04-15 09:51:11,930  INFO  backend.llm.response_generator  RESPONSE_OK  move_type=question  len=191
+2026-04-15 09:51:11,931  INFO  backend.agent.nodes.response_gen  RESPONSE_GEN_EXIT  response_len=191  was_blended=False
+2026-04-15 09:51:11,934  INFO  backend.agent.nodes.safety  SAFETY_ENTRY  response_len=191  turn=1  questions_asked=2
+2026-04-15 09:51:11,935  INFO  backend.agent.nodes.safety  SAFETY_ESCALATION_CHECK  info_count=7  keys=['Hairfall', 'Weight_Gain', 'Acne', 'Age', 'Sex', 'Menstrual_Regularity', 'Menstrual_Bleeding']
+2026-04-15 09:51:12,512  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:51:12,522  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=587ms  in=136  out=19  finish_reason=stop  max_tokens=60
+2026-04-15 09:51:12,523  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=safety.escalation_check  model=gpt-4.1-mini  in=136  out=19  cost=$0.00008480
+2026-04-15 09:51:12,523  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 10 | Successes: 10 | Retries: 0 | Failures: 0 | Total Output Tokens: 1130
+2026-04-15 09:51:12,524  INFO  backend.llm.client  LLM_CALL  caller=safety.escalation_check    provider=openai    model=gpt-4.1-mini                    status=OK  latency=    588ms  in_tokens=129     out_tokens=29      cost=$0.000098  max_tokens=60
+2026-04-15 09:51:12,524  INFO  backend.agent.nodes.safety  SAFETY_ESCALATION_RESULT  decision=NO  reason='The symptoms described do not indicate an immediate medical emergency but may require routine medical evaluation.'
+2026-04-15 09:51:12,524  INFO  backend.agent.nodes.safety  SAFETY_EXIT  final_len=191  turn=2  new_questions=2  last_question=weight distribution
+2026-04-15 09:51:12,525  INFO  backend.session.manager  SESSION_MESSAGE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  message_len=71  response_len=191  phase=narrowing  turn=2
+2026-04-15 09:51:12,525  INFO  backend.api.websocket  WS_RESPONSE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  response_len=191  phase=narrowing
+2026-04-15 09:51:30,099  INFO  backend.api.websocket  WS_MESSAGE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  message_len=4
+2026-04-15 09:51:30,103  INFO  backend.agent.nodes.intake  INTAKE_ENTRY  message_len=4  last_gap=weight distribution  existing_facts=7
+2026-04-15 09:51:30,104  INFO  backend.llm.intent_classifier  INTENT_REQ  message_len=4  last_gap=weight distribution
+2026-04-15 09:51:30,107  INFO  backend.llm.fact_extractor  EXTRACT_REQ  message_len=4  last_topic=weight distribution  existing_facts=7
+2026-04-15 09:51:30,889  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:51:30,910  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=803ms  in=329  out=1  finish_reason=stop  max_tokens=512
+2026-04-15 09:51:30,911  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=fact_extractor  model=gpt-4.1-mini  in=329  out=1  cost=$0.00013320
+2026-04-15 09:51:30,911  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 12 | Successes: 11 | Retries: 0 | Failures: 0 | Total Output Tokens: 1131
+2026-04-15 09:51:30,911  INFO  backend.llm.client  LLM_CALL  caller=fact_extractor             provider=openai    model=gpt-4.1-mini                    status=OK  latency=    804ms  in_tokens=316     out_tokens=1       cost=$0.000128  max_tokens=512
+2026-04-15 09:51:30,912  INFO  backend.llm.fact_extractor  EXTRACT_RAW  response='[]'
+2026-04-15 09:51:30,944  INFO  backend.llm.fact_extractor  EXTRACT_OK  facts_count=0  facts=[]
+2026-04-15 09:51:32,009  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:51:32,020  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=1916ms  in=260  out=2  finish_reason=stop  max_tokens=10
+2026-04-15 09:51:32,020  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=intent_classifier  model=gpt-4.1-mini  in=260  out=2  cost=$0.00010720
+2026-04-15 09:51:32,021  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 12 | Successes: 12 | Retries: 0 | Failures: 0 | Total Output Tokens: 1133
+2026-04-15 09:51:32,022  INFO  backend.llm.client  LLM_CALL  caller=intent_classifier          provider=openai    model=gpt-4.1-mini                    status=OK  latency=   1918ms  in_tokens=281     out_tokens=2       cost=$0.000116  max_tokens=10
+2026-04-15 09:51:32,023  INFO  backend.llm.intent_classifier  INTENT_RAW  raw_response='answering'  parsed='answering'
+2026-04-15 09:51:32,023  INFO  backend.llm.intent_classifier  INTENT_OK  result=answering
+2026-04-15 09:51:32,024  INFO  backend.agent.nodes.intake  INTAKE_INTENT  result=answering
+2026-04-15 09:51:32,024  INFO  backend.agent.nodes.intake  INTAKE_FACTS  count=0  keys=[]
+2026-04-15 09:51:32,024  INFO  backend.agent.nodes.intake  INTAKE_EXIT  intent=answering  fact_count=0  volunteered=0  pending_explanation=False
+2026-04-15 09:51:32,026  INFO  backend.agent.routing  ROUTE_DECISION  intent=answering  destination=reason
+2026-04-15 09:51:32,031  INFO  backend.agent.nodes.reason  REASON_ENTRY  turn=2  phase=narrowing  intake_facts=0  info_count=7
+2026-04-15 09:51:32,032  INFO  backend.agent.nodes.reason  REASON_MERGE  new_denied=[]  info_count=7  unconfirmed=0
+2026-04-15 09:51:32,032  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=meningitis_triad  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:51:32,032  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=acute_mi_pattern  score=0  soft=2  hard=3  state=clear
+2026-04-15 09:51:32,033  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=subarachnoid_haemorrhage  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:51:32,033  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pulmonary_embolism_pattern  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:51:32,033  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=stroke_pattern  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:51:32,033  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=surgical_abdomen  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:51:32,033  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pyelonephritis_urosepsis  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:51:32,033  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=dengue_meningococcaemia  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:51:32,033  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=cardiac_syncope  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:51:32,034  INFO  backend.llm.clinical_reasoner  REASONER_REQ  turn=2  info_count=7
+2026-04-15 09:51:36,510  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:51:36,533  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=4499ms  in=638  out=383  finish_reason=stop  max_tokens=512
+2026-04-15 09:51:36,534  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=clinical_reasoner  model=gpt-4.1-mini  in=638  out=383  cost=$0.00086800
+2026-04-15 09:51:36,535  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 13 | Successes: 13 | Retries: 0 | Failures: 0 | Total Output Tokens: 1516
+2026-04-15 09:51:36,535  INFO  backend.llm.client  LLM_CALL  caller=clinical_reasoner          provider=openai    model=gpt-4.1-mini                    status=OK  latency=   4501ms  in_tokens=693     out_tokens=381     cost=$0.000887  max_tokens=512
+2026-04-15 09:51:36,535  INFO  backend.llm.clinical_reasoner  REASONER_RAW  response_len=1526
+2026-04-15 09:51:36,536  INFO  backend.llm.clinical_reasoner  REASONER_OK  hypotheses=5  top=Polycystic Ovary Syndrome (PCOS)(0.60)  next_q=weight distribution  confidence=moderate  summarize=False
+2026-04-15 09:51:36,536  INFO  backend.agent.nodes.reason  REASON_HYPOTHESIS  leading=Polycystic Ovary Syndrome (PCOS)  score=0.600  differential=3  ruled_out=1
+2026-04-15 09:51:36,536  INFO  backend.agent.nodes.reason  REASON_EXIT  phase=narrowing  info=7  gaps=['weight distribution']  hypothesis=Polycystic Ovary Syndrome (PCOS)(0.600)  confidence=moderate
+2026-04-15 09:51:36,540  INFO  backend.agent.nodes.flow_control  FLOW_ENTRY  phase=narrowing  intent=answering  info_count=7  gaps=1  confirmed_rf=0  ending=none  closing_turn=0
+2026-04-15 09:51:36,540  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=meningitis_triad  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:51:36,541  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=acute_mi_pattern  score=0  soft=2  hard=3  state=clear
+2026-04-15 09:51:36,541  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=subarachnoid_haemorrhage  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:51:36,541  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pulmonary_embolism_pattern  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:51:36,542  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=stroke_pattern  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:51:36,542  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=surgical_abdomen  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:51:36,542  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pyelonephritis_urosepsis  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:51:36,543  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=dengue_meningococcaemia  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:51:36,545  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=cardiac_syncope  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:51:36,546  INFO  backend.agent.nodes.flow_control  FLOW_MOVE  type=question  target=weight distribution  ask_count=2
+2026-04-15 09:51:36,547  INFO  backend.agent.nodes.response_gen  RESPONSE_GEN_ENTRY  move_type=question  pending_explanation=False  intent=answering
+2026-04-15 09:51:36,547  INFO  backend.llm.response_generator  RESPONSE_REQ  move_type=question  target_gap=weight distribution  red_flag_id=(none)
+2026-04-15 09:51:37,691  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:51:37,711  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=1163ms  in=229  out=39  finish_reason=stop  max_tokens=200
+2026-04-15 09:51:37,713  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=response_generator  model=gpt-4.1-mini  in=229  out=39  cost=$0.00015400
+2026-04-15 09:51:37,714  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 14 | Successes: 14 | Retries: 0 | Failures: 0 | Total Output Tokens: 1555
+2026-04-15 09:51:37,715  INFO  backend.llm.client  LLM_CALL  caller=response_generator         provider=openai    model=gpt-4.1-mini                    status=OK  latency=   1168ms  in_tokens=239     out_tokens=49      cost=$0.000174  max_tokens=200
+2026-04-15 09:51:37,715  INFO  backend.llm.response_generator  RESPONSE_RAW  response="I understand you've been experiencing some weight gain. Can you tell me where you’ve noticed the weight mostly accumulating? For example, is it around your belly, hips, thighs, or evenly distributed?"
+2026-04-15 09:51:37,716  INFO  backend.llm.response_generator  RESPONSE_OK  move_type=question  len=199
+2026-04-15 09:51:37,716  INFO  backend.agent.nodes.response_gen  RESPONSE_GEN_EXIT  response_len=199  was_blended=False
+2026-04-15 09:51:37,718  INFO  backend.agent.nodes.safety  SAFETY_ENTRY  response_len=199  turn=2  questions_asked=4
+2026-04-15 09:51:37,719  WARNING  backend.agent.nodes.safety  SAFETY_DEDUP  duplicate_detected  response_len=199
+2026-04-15 09:51:37,719  INFO  backend.agent.nodes.safety  SAFETY_ESCALATION_CHECK  info_count=7  keys=['Hairfall', 'Weight_Gain', 'Acne', 'Age', 'Sex', 'Menstrual_Regularity', 'Menstrual_Bleeding']
+2026-04-15 09:51:38,368  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:51:38,371  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=651ms  in=136  out=19  finish_reason=stop  max_tokens=60
+2026-04-15 09:51:38,374  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=safety.escalation_check  model=gpt-4.1-mini  in=136  out=19  cost=$0.00008480
+2026-04-15 09:51:38,374  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 15 | Successes: 15 | Retries: 0 | Failures: 0 | Total Output Tokens: 1574
+2026-04-15 09:51:38,375  INFO  backend.llm.client  LLM_CALL  caller=safety.escalation_check    provider=openai    model=gpt-4.1-mini                    status=OK  latency=    655ms  in_tokens=129     out_tokens=29      cost=$0.000098  max_tokens=60
+2026-04-15 09:51:38,375  INFO  backend.agent.nodes.safety  SAFETY_ESCALATION_RESULT  decision=NO  reason='The symptoms described do not indicate an immediate medical emergency but may require routine medical evaluation.'
+2026-04-15 09:51:38,375  INFO  backend.agent.nodes.safety  SAFETY_EXIT  final_len=133  turn=3  new_questions=1  last_question=weight distribution
+2026-04-15 09:51:38,378  INFO  backend.session.manager  SESSION_MESSAGE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  message_len=4  response_len=133  phase=narrowing  turn=3
+2026-04-15 09:51:38,379  INFO  backend.api.websocket  WS_RESPONSE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  response_len=133  phase=narrowing
+2026-04-15 09:52:09,515  INFO  backend.api.websocket  WS_MESSAGE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  message_len=61
+2026-04-15 09:52:09,518  INFO  backend.agent.nodes.intake  INTAKE_ENTRY  message_len=61  last_gap=weight distribution  existing_facts=7
+2026-04-15 09:52:09,518  INFO  backend.llm.intent_classifier  INTENT_REQ  message_len=61  last_gap=weight distribution
+2026-04-15 09:52:09,523  INFO  backend.llm.fact_extractor  EXTRACT_REQ  message_len=61  last_topic=weight distribution  existing_facts=7
+2026-04-15 09:52:10,262  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:52:10,278  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=759ms  in=271  out=2  finish_reason=stop  max_tokens=10
+2026-04-15 09:52:10,280  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=intent_classifier  model=gpt-4.1-mini  in=271  out=2  cost=$0.00011160
+2026-04-15 09:52:10,280  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 17 | Successes: 16 | Retries: 0 | Failures: 0 | Total Output Tokens: 1576
+2026-04-15 09:52:10,280  INFO  backend.llm.client  LLM_CALL  caller=intent_classifier          provider=openai    model=gpt-4.1-mini                    status=OK  latency=    762ms  in_tokens=295     out_tokens=2       cost=$0.000121  max_tokens=10
+2026-04-15 09:52:10,281  INFO  backend.llm.intent_classifier  INTENT_RAW  raw_response='answering'  parsed='answering'
+2026-04-15 09:52:10,282  INFO  backend.llm.intent_classifier  INTENT_OK  result=answering
+2026-04-15 09:52:10,419  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:52:10,421  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=898ms  in=340  out=37  finish_reason=stop  max_tokens=512
+2026-04-15 09:52:10,422  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=fact_extractor  model=gpt-4.1-mini  in=340  out=37  cost=$0.00019520
+2026-04-15 09:52:10,422  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 17 | Successes: 17 | Retries: 0 | Failures: 0 | Total Output Tokens: 1613
+2026-04-15 09:52:10,422  INFO  backend.llm.client  LLM_CALL  caller=fact_extractor             provider=openai    model=gpt-4.1-mini                    status=OK  latency=    899ms  in_tokens=330     out_tokens=34      cost=$0.000186  max_tokens=512
+2026-04-15 09:52:10,423  INFO  backend.llm.fact_extractor  EXTRACT_RAW  response='[{"key": "Weight_Distribution", "value": "mostly around hips and a little bloated feeling overall", "denied": false, "confidence": "high"}]'
+2026-04-15 09:52:10,423  INFO  backend.llm.fact_extractor  EXTRACT_OK  facts_count=1  facts=[('Weight_Distribution', 'mostly around hips and a little bloated feeling overall', 'high')]
+2026-04-15 09:52:10,424  INFO  backend.agent.nodes.intake  INTAKE_INTENT  result=answering
+2026-04-15 09:52:10,424  INFO  backend.agent.nodes.intake  INTAKE_FACTS  count=1  keys=['Weight_Distribution']
+2026-04-15 09:52:10,424  INFO  backend.agent.nodes.intake  INTAKE_EXIT  intent=answering  fact_count=1  volunteered=1  pending_explanation=False
+2026-04-15 09:52:10,425  INFO  backend.agent.routing  ROUTE_DECISION  intent=answering  destination=reason
+2026-04-15 09:52:10,429  INFO  backend.agent.nodes.reason  REASON_ENTRY  turn=3  phase=narrowing  intake_facts=1  info_count=7
+2026-04-15 09:52:10,430  INFO  backend.agent.nodes.reason  REASON_MERGE  new_denied=[]  info_count=8  unconfirmed=0
+2026-04-15 09:52:10,430  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=meningitis_triad  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:52:10,430  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=acute_mi_pattern  score=0  soft=2  hard=3  state=clear
+2026-04-15 09:52:10,430  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=subarachnoid_haemorrhage  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:52:10,431  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pulmonary_embolism_pattern  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:52:10,431  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=stroke_pattern  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:52:10,431  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=surgical_abdomen  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:52:10,432  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pyelonephritis_urosepsis  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:52:10,432  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=dengue_meningococcaemia  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:52:10,433  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=cardiac_syncope  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:52:10,434  INFO  backend.llm.clinical_reasoner  REASONER_REQ  turn=3  info_count=8
+2026-04-15 09:52:15,079  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:52:15,104  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=4669ms  in=685  out=427  finish_reason=stop  max_tokens=512
+2026-04-15 09:52:15,105  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=clinical_reasoner  model=gpt-4.1-mini  in=685  out=427  cost=$0.00095720
+2026-04-15 09:52:15,105  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 18 | Successes: 18 | Retries: 0 | Failures: 0 | Total Output Tokens: 2040
+2026-04-15 09:52:15,105  INFO  backend.llm.client  LLM_CALL  caller=clinical_reasoner          provider=openai    model=gpt-4.1-mini                    status=OK  latency=   4670ms  in_tokens=753     out_tokens=427     cost=$0.000984  max_tokens=512
+2026-04-15 09:52:15,105  INFO  backend.llm.clinical_reasoner  REASONER_RAW  response_len=1708
+2026-04-15 09:52:15,106  INFO  backend.llm.clinical_reasoner  REASONER_OK  hypotheses=5  top=Polycystic Ovary Syndrome (PCOS)(0.55)  next_q=fatigue or cold intolerance  confidence=moderate  summarize=False
+2026-04-15 09:52:15,106  INFO  backend.agent.nodes.reason  REASON_HYPOTHESIS  leading=Polycystic Ovary Syndrome (PCOS)  score=0.550  differential=3  ruled_out=1
+2026-04-15 09:52:15,106  INFO  backend.agent.nodes.reason  REASON_EXIT  phase=narrowing  info=8  gaps=['fatigue or cold intolerance']  hypothesis=Polycystic Ovary Syndrome (PCOS)(0.550)  confidence=moderate
+2026-04-15 09:52:15,108  INFO  backend.agent.nodes.flow_control  FLOW_ENTRY  phase=narrowing  intent=answering  info_count=8  gaps=1  confirmed_rf=0  ending=none  closing_turn=0
+2026-04-15 09:52:15,110  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=meningitis_triad  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:52:15,110  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=acute_mi_pattern  score=0  soft=2  hard=3  state=clear
+2026-04-15 09:52:15,110  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=subarachnoid_haemorrhage  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:52:15,111  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pulmonary_embolism_pattern  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:52:15,111  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=stroke_pattern  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:52:15,112  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=surgical_abdomen  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:52:15,112  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pyelonephritis_urosepsis  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:52:15,112  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=dengue_meningococcaemia  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:52:15,112  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=cardiac_syncope  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:52:15,112  INFO  backend.agent.nodes.flow_control  FLOW_MOVE  type=question  target=fatigue or cold intolerance  ask_count=1
+2026-04-15 09:52:15,119  INFO  backend.agent.nodes.response_gen  RESPONSE_GEN_ENTRY  move_type=question  pending_explanation=False  intent=answering
+2026-04-15 09:52:15,120  INFO  backend.llm.response_generator  RESPONSE_REQ  move_type=question  target_gap=fatigue or cold intolerance  red_flag_id=(none)
+2026-04-15 09:52:15,971  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:52:15,990  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=868ms  in=248  out=32  finish_reason=stop  max_tokens=200
+2026-04-15 09:52:15,992  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=response_generator  model=gpt-4.1-mini  in=248  out=32  cost=$0.00015040
+2026-04-15 09:52:15,993  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 19 | Successes: 19 | Retries: 0 | Failures: 0 | Total Output Tokens: 2072
+2026-04-15 09:52:15,994  INFO  backend.llm.client  LLM_CALL  caller=response_generator         provider=openai    model=gpt-4.1-mini                    status=OK  latency=    873ms  in_tokens=261     out_tokens=45      cost=$0.000176  max_tokens=200
+2026-04-15 09:52:15,995  INFO  backend.llm.response_generator  RESPONSE_RAW  response="I understand you've been experiencing hairfall and some changes in your weight and skin. Have you noticed feeling more tired than usual or feeling unusually sensitive to cold lately?"
+2026-04-15 09:52:15,996  INFO  backend.llm.response_generator  RESPONSE_OK  move_type=question  len=182
+2026-04-15 09:52:15,997  INFO  backend.agent.nodes.response_gen  RESPONSE_GEN_EXIT  response_len=182  was_blended=False
+2026-04-15 09:52:15,999  INFO  backend.agent.nodes.safety  SAFETY_ENTRY  response_len=182  turn=3  questions_asked=5
+2026-04-15 09:52:16,000  INFO  backend.agent.nodes.safety  SAFETY_ESCALATION_CHECK  info_count=8  keys=['Hairfall', 'Weight_Gain', 'Acne', 'Age', 'Sex', 'Menstrual_Regularity', 'Menstrual_Bleeding', 'Weight_Distribution']
+2026-04-15 09:52:16,703  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:52:16,714  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=713ms  in=152  out=19  finish_reason=stop  max_tokens=60
+2026-04-15 09:52:16,714  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=safety.escalation_check  model=gpt-4.1-mini  in=152  out=19  cost=$0.00009120
+2026-04-15 09:52:16,715  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 20 | Successes: 20 | Retries: 0 | Failures: 0 | Total Output Tokens: 2091
+2026-04-15 09:52:16,716  INFO  backend.llm.client  LLM_CALL  caller=safety.escalation_check    provider=openai    model=gpt-4.1-mini                    status=OK  latency=    715ms  in_tokens=149     out_tokens=29      cost=$0.000106  max_tokens=60
+2026-04-15 09:52:16,716  INFO  backend.agent.nodes.safety  SAFETY_ESCALATION_RESULT  decision=NO  reason='The symptoms described do not indicate an immediate medical emergency but may require routine medical evaluation.'
+2026-04-15 09:52:16,716  INFO  backend.agent.nodes.safety  SAFETY_EXIT  final_len=182  turn=4  new_questions=1  last_question=fatigue or cold intolerance
+2026-04-15 09:52:16,720  INFO  backend.session.manager  SESSION_MESSAGE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  message_len=61  response_len=182  phase=narrowing  turn=4
+2026-04-15 09:52:16,721  INFO  backend.api.websocket  WS_RESPONSE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  response_len=182  phase=narrowing
+2026-04-15 09:52:35,978  INFO  backend.api.websocket  WS_MESSAGE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  message_len=61
+2026-04-15 09:52:35,980  INFO  backend.agent.nodes.intake  INTAKE_ENTRY  message_len=61  last_gap=fatigue or cold intolerance  existing_facts=8
+2026-04-15 09:52:35,980  INFO  backend.llm.intent_classifier  INTENT_REQ  message_len=61  last_gap=fatigue or cold intolerance
+2026-04-15 09:52:35,984  INFO  backend.llm.fact_extractor  EXTRACT_REQ  message_len=61  last_topic=fatigue or cold intolerance  existing_facts=8
+2026-04-15 09:52:36,653  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:52:36,685  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=704ms  in=272  out=2  finish_reason=stop  max_tokens=10
+2026-04-15 09:52:36,685  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=intent_classifier  model=gpt-4.1-mini  in=272  out=2  cost=$0.00011200
+2026-04-15 09:52:36,686  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 22 | Successes: 21 | Retries: 0 | Failures: 0 | Total Output Tokens: 2093
+2026-04-15 09:52:36,687  INFO  backend.llm.client  LLM_CALL  caller=intent_classifier          provider=openai    model=gpt-4.1-mini                    status=OK  latency=    706ms  in_tokens=297     out_tokens=2       cost=$0.000122  max_tokens=10
+2026-04-15 09:52:36,687  INFO  backend.llm.intent_classifier  INTENT_RAW  raw_response='answering'  parsed='answering'
+2026-04-15 09:52:36,687  INFO  backend.llm.intent_classifier  INTENT_OK  result=answering
+2026-04-15 09:52:37,177  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:52:37,198  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=1214ms  in=356  out=35  finish_reason=stop  max_tokens=512
+2026-04-15 09:52:37,199  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=fact_extractor  model=gpt-4.1-mini  in=356  out=35  cost=$0.00019840
+2026-04-15 09:52:37,199  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 22 | Successes: 22 | Retries: 0 | Failures: 0 | Total Output Tokens: 2128
+2026-04-15 09:52:37,199  INFO  backend.llm.client  LLM_CALL  caller=fact_extractor             provider=openai    model=gpt-4.1-mini                    status=OK  latency=   1215ms  in_tokens=351     out_tokens=32      cost=$0.000192  max_tokens=512
+2026-04-15 09:52:37,199  INFO  backend.llm.fact_extractor  EXTRACT_RAW  response='[{"key": "Fatigue", "value": "usually more tired than usual even after sufficient food", "denied": false, "confidence": "high"}]'
+2026-04-15 09:52:37,199  INFO  backend.llm.fact_extractor  EXTRACT_OK  facts_count=1  facts=[('Fatigue', 'usually more tired than usual even after sufficient food', 'high')]
+2026-04-15 09:52:37,200  INFO  backend.agent.nodes.intake  INTAKE_INTENT  result=answering
+2026-04-15 09:52:37,200  INFO  backend.agent.nodes.intake  INTAKE_FACTS  count=1  keys=['Fatigue']
+2026-04-15 09:52:37,200  INFO  backend.agent.nodes.intake  INTAKE_EXIT  intent=answering  fact_count=1  volunteered=1  pending_explanation=False
+2026-04-15 09:52:37,201  INFO  backend.agent.routing  ROUTE_DECISION  intent=answering  destination=reason
+2026-04-15 09:52:37,202  INFO  backend.agent.nodes.reason  REASON_ENTRY  turn=4  phase=narrowing  intake_facts=1  info_count=8
+2026-04-15 09:52:37,202  INFO  backend.agent.nodes.reason  REASON_MERGE  new_denied=[]  info_count=9  unconfirmed=0
+2026-04-15 09:52:37,203  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=meningitis_triad  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:52:37,205  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=acute_mi_pattern  score=0  soft=2  hard=3  state=clear
+2026-04-15 09:52:37,205  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=subarachnoid_haemorrhage  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:52:37,205  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pulmonary_embolism_pattern  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:52:37,205  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=stroke_pattern  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:52:37,205  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=surgical_abdomen  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:52:37,206  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pyelonephritis_urosepsis  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:52:37,206  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=dengue_meningococcaemia  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:52:37,206  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=cardiac_syncope  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:52:37,211  INFO  backend.llm.clinical_reasoner  REASONER_REQ  turn=4  info_count=9
+2026-04-15 09:52:42,509  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:52:42,530  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=5319ms  in=677  out=340  finish_reason=stop  max_tokens=512
+2026-04-15 09:52:42,531  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=clinical_reasoner  model=gpt-4.1-mini  in=677  out=340  cost=$0.00081480
+2026-04-15 09:52:42,531  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 23 | Successes: 23 | Retries: 0 | Failures: 0 | Total Output Tokens: 2468
+2026-04-15 09:52:42,531  INFO  backend.llm.client  LLM_CALL  caller=clinical_reasoner          provider=openai    model=gpt-4.1-mini                    status=OK  latency=   5320ms  in_tokens=763     out_tokens=343     cost=$0.000854  max_tokens=512
+2026-04-15 09:52:42,531  INFO  backend.llm.clinical_reasoner  REASONER_RAW  response_len=1372
+2026-04-15 09:52:42,532  INFO  backend.llm.clinical_reasoner  REASONER_OK  hypotheses=4  top=Polycystic Ovary Syndrome (PCOS)(0.60)  next_q=cold intolerance  confidence=moderate  summarize=False
+2026-04-15 09:52:42,532  INFO  backend.agent.nodes.reason  REASON_HYPOTHESIS  leading=Polycystic Ovary Syndrome (PCOS)  score=0.600  differential=2  ruled_out=1
+2026-04-15 09:52:42,532  INFO  backend.agent.nodes.reason  REASON_EXIT  phase=narrowing  info=9  gaps=['cold intolerance']  hypothesis=Polycystic Ovary Syndrome (PCOS)(0.600)  confidence=moderate
+2026-04-15 09:52:42,536  INFO  backend.agent.nodes.flow_control  FLOW_ENTRY  phase=narrowing  intent=answering  info_count=9  gaps=1  confirmed_rf=0  ending=none  closing_turn=0
+2026-04-15 09:52:42,538  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=meningitis_triad  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:52:42,538  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=acute_mi_pattern  score=0  soft=2  hard=3  state=clear
+2026-04-15 09:52:42,538  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=subarachnoid_haemorrhage  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:52:42,539  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pulmonary_embolism_pattern  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:52:42,539  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=stroke_pattern  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:52:42,541  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=surgical_abdomen  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:52:42,541  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pyelonephritis_urosepsis  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:52:42,542  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=dengue_meningococcaemia  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:52:42,544  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=cardiac_syncope  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:52:42,544  INFO  backend.agent.nodes.flow_control  FLOW_MOVE  type=question  target=cold intolerance  ask_count=1
+2026-04-15 09:52:42,547  INFO  backend.agent.nodes.response_gen  RESPONSE_GEN_ENTRY  move_type=question  pending_explanation=False  intent=answering
+2026-04-15 09:52:42,547  INFO  backend.llm.response_generator  RESPONSE_REQ  move_type=question  target_gap=cold intolerance  red_flag_id=(none)
+2026-04-15 09:52:43,354  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:52:43,363  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=815ms  in=251  out=41  finish_reason=stop  max_tokens=200
+2026-04-15 09:52:43,364  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=response_generator  model=gpt-4.1-mini  in=251  out=41  cost=$0.00016600
+2026-04-15 09:52:43,364  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 24 | Successes: 24 | Retries: 0 | Failures: 0 | Total Output Tokens: 2509
+2026-04-15 09:52:43,366  INFO  backend.llm.client  LLM_CALL  caller=response_generator         provider=openai    model=gpt-4.1-mini                    status=OK  latency=    818ms  in_tokens=263     out_tokens=56      cost=$0.000195  max_tokens=200
+2026-04-15 09:52:43,367  INFO  backend.llm.response_generator  RESPONSE_RAW  response="I understand you've been feeling more tired than usual and have noticed some changes like hairfall and weight gain. Have you also been feeling unusually sensitive to cold or finding that you get cold more easily than before?"
+2026-04-15 09:52:43,368  INFO  backend.llm.response_generator  RESPONSE_OK  move_type=question  len=224
+2026-04-15 09:52:43,368  INFO  backend.agent.nodes.response_gen  RESPONSE_GEN_EXIT  response_len=224  was_blended=False
+2026-04-15 09:52:43,371  INFO  backend.agent.nodes.safety  SAFETY_ENTRY  response_len=224  turn=4  questions_asked=6
+2026-04-15 09:52:43,373  INFO  backend.agent.nodes.safety  SAFETY_ESCALATION_CHECK  info_count=9  keys=['Hairfall', 'Weight_Gain', 'Acne', 'Age', 'Sex', 'Menstrual_Regularity', 'Menstrual_Bleeding', 'Weight_Distribution', 'Fatigue']
+2026-04-15 09:52:43,959  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:52:43,989  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=616ms  in=166  out=13  finish_reason=stop  max_tokens=60
+2026-04-15 09:52:43,990  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=safety.escalation_check  model=gpt-4.1-mini  in=166  out=13  cost=$0.00008720
+2026-04-15 09:52:43,991  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 25 | Successes: 25 | Retries: 0 | Failures: 0 | Total Output Tokens: 2522
+2026-04-15 09:52:43,991  INFO  backend.llm.client  LLM_CALL  caller=safety.escalation_check    provider=openai    model=gpt-4.1-mini                    status=OK  latency=    618ms  in_tokens=166     out_tokens=21      cost=$0.000100  max_tokens=60
+2026-04-15 09:52:43,991  INFO  backend.agent.nodes.safety  SAFETY_ESCALATION_RESULT  decision=NO  reason='Symptoms suggest hormonal imbalance but no immediate medical emergency indicated.'
+2026-04-15 09:52:43,992  INFO  backend.agent.nodes.safety  SAFETY_EXIT  final_len=224  turn=5  new_questions=1  last_question=cold intolerance
+2026-04-15 09:52:43,994  INFO  backend.session.manager  SESSION_MESSAGE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  message_len=61  response_len=224  phase=narrowing  turn=5
+2026-04-15 09:52:43,995  INFO  backend.api.websocket  WS_RESPONSE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  response_len=224  phase=narrowing
+2026-04-15 09:53:27,682  INFO  backend.api.websocket  WS_MESSAGE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  message_len=38
+2026-04-15 09:53:27,685  INFO  backend.agent.nodes.intake  INTAKE_ENTRY  message_len=38  last_gap=cold intolerance  existing_facts=9
+2026-04-15 09:53:27,685  INFO  backend.llm.intent_classifier  INTENT_REQ  message_len=38  last_gap=cold intolerance
+2026-04-15 09:53:27,689  INFO  backend.llm.fact_extractor  EXTRACT_REQ  message_len=38  last_topic=cold intolerance  existing_facts=9
+2026-04-15 09:53:28,170  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:53:28,190  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=504ms  in=269  out=2  finish_reason=stop  max_tokens=10
+2026-04-15 09:53:28,191  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=intent_classifier  model=gpt-4.1-mini  in=269  out=2  cost=$0.00011080
+2026-04-15 09:53:28,192  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 27 | Successes: 26 | Retries: 0 | Failures: 0 | Total Output Tokens: 2524
+2026-04-15 09:53:28,192  INFO  backend.llm.client  LLM_CALL  caller=intent_classifier          provider=openai    model=gpt-4.1-mini                    status=OK  latency=    507ms  in_tokens=288     out_tokens=2       cost=$0.000118  max_tokens=10
+2026-04-15 09:53:28,192  INFO  backend.llm.intent_classifier  INTENT_RAW  raw_response='answering'  parsed='answering'
+2026-04-15 09:53:28,193  INFO  backend.llm.intent_classifier  INTENT_OK  result=answering
+2026-04-15 09:53:28,890  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:53:28,900  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=1211ms  in=366  out=35  finish_reason=stop  max_tokens=512
+2026-04-15 09:53:28,901  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=fact_extractor  model=gpt-4.1-mini  in=366  out=35  cost=$0.00020240
+2026-04-15 09:53:28,901  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 27 | Successes: 27 | Retries: 0 | Failures: 0 | Total Output Tokens: 2559
+2026-04-15 09:53:28,902  INFO  backend.llm.client  LLM_CALL  caller=fact_extractor             provider=openai    model=gpt-4.1-mini                    status=OK  latency=   1213ms  in_tokens=360     out_tokens=28      cost=$0.000189  max_tokens=512
+2026-04-15 09:53:28,902  INFO  backend.llm.fact_extractor  EXTRACT_RAW  response='[{"key": "Cold_Intolerance", "value": "AC is effecting me more than over", "denied": false, "confidence": "high"}]'
+2026-04-15 09:53:28,902  INFO  backend.llm.fact_extractor  EXTRACT_OK  facts_count=1  facts=[('Cold_Intolerance', 'AC is effecting me more than over', 'high')]
+2026-04-15 09:53:28,902  INFO  backend.agent.nodes.intake  INTAKE_INTENT  result=answering
+2026-04-15 09:53:28,903  INFO  backend.agent.nodes.intake  INTAKE_FACTS  count=1  keys=['Cold_Intolerance']
+2026-04-15 09:53:28,903  INFO  backend.agent.nodes.intake  INTAKE_EXIT  intent=answering  fact_count=1  volunteered=1  pending_explanation=False
+2026-04-15 09:53:28,903  INFO  backend.agent.routing  ROUTE_DECISION  intent=answering  destination=reason
+2026-04-15 09:53:28,905  INFO  backend.agent.nodes.reason  REASON_ENTRY  turn=5  phase=narrowing  intake_facts=1  info_count=9
+2026-04-15 09:53:28,905  INFO  backend.agent.nodes.reason  REASON_MERGE  new_denied=[]  info_count=10  unconfirmed=0
+2026-04-15 09:53:28,906  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=meningitis_triad  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:53:28,906  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=acute_mi_pattern  score=0  soft=2  hard=3  state=clear
+2026-04-15 09:53:28,906  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=subarachnoid_haemorrhage  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:53:28,907  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pulmonary_embolism_pattern  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:53:28,908  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=stroke_pattern  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:53:28,908  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=surgical_abdomen  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:53:28,909  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pyelonephritis_urosepsis  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:53:28,909  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=dengue_meningococcaemia  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:53:28,910  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=cardiac_syncope  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:53:28,911  INFO  backend.llm.clinical_reasoner  REASONER_REQ  turn=5  info_count=10
+2026-04-15 09:53:33,878  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:53:33,887  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=4976ms  in=673  out=424  finish_reason=stop  max_tokens=512
+2026-04-15 09:53:33,888  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=clinical_reasoner  model=gpt-4.1-mini  in=673  out=424  cost=$0.00094760
+2026-04-15 09:53:33,889  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 28 | Successes: 28 | Retries: 0 | Failures: 0 | Total Output Tokens: 2983
+2026-04-15 09:53:33,892  INFO  backend.llm.client  LLM_CALL  caller=clinical_reasoner          provider=openai    model=gpt-4.1-mini                    status=OK  latency=   4980ms  in_tokens=775     out_tokens=403     cost=$0.000955  max_tokens=512
+2026-04-15 09:53:33,892  INFO  backend.llm.clinical_reasoner  REASONER_RAW  response_len=1614
+2026-04-15 09:53:33,892  INFO  backend.llm.clinical_reasoner  REASONER_OK  hypotheses=5  top=Hypothyroidism(0.70)  next_q=skin texture  confidence=moderate  summarize=False
+2026-04-15 09:53:33,895  INFO  backend.agent.nodes.reason  REASON_HYPOTHESIS  leading=Hypothyroidism  score=0.700  differential=2  ruled_out=2
+2026-04-15 09:53:33,896  INFO  backend.agent.nodes.reason  REASON_EXIT  phase=narrowing  info=10  gaps=['skin texture']  hypothesis=Hypothyroidism(0.700)  confidence=moderate
+2026-04-15 09:53:33,898  INFO  backend.agent.nodes.flow_control  FLOW_ENTRY  phase=narrowing  intent=answering  info_count=10  gaps=1  confirmed_rf=0  ending=none  closing_turn=0
+2026-04-15 09:53:33,902  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=meningitis_triad  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:53:33,903  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=acute_mi_pattern  score=0  soft=2  hard=3  state=clear
+2026-04-15 09:53:33,904  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=subarachnoid_haemorrhage  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:53:33,904  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pulmonary_embolism_pattern  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:53:33,905  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=stroke_pattern  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:53:33,905  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=surgical_abdomen  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:53:33,905  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pyelonephritis_urosepsis  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:53:33,906  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=dengue_meningococcaemia  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:53:33,906  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=cardiac_syncope  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:53:33,906  INFO  backend.agent.nodes.flow_control  FLOW_MOVE  type=question  target=skin texture  ask_count=1
+2026-04-15 09:53:33,907  INFO  backend.agent.nodes.response_gen  RESPONSE_GEN_ENTRY  move_type=question  pending_explanation=False  intent=answering
+2026-04-15 09:53:33,908  INFO  backend.llm.response_generator  RESPONSE_REQ  move_type=question  target_gap=skin texture  red_flag_id=(none)
+2026-04-15 09:53:34,908  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:53:34,933  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=1025ms  in=282  out=34  finish_reason=stop  max_tokens=200
+2026-04-15 09:53:34,934  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=response_generator  model=gpt-4.1-mini  in=282  out=34  cost=$0.00016720
+2026-04-15 09:53:34,934  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 29 | Successes: 29 | Retries: 0 | Failures: 0 | Total Output Tokens: 3017
+2026-04-15 09:53:34,935  INFO  backend.llm.client  LLM_CALL  caller=response_generator         provider=openai    model=gpt-4.1-mini                    status=OK  latency=   1027ms  in_tokens=284     out_tokens=35      cost=$0.000170  max_tokens=200
+2026-04-15 09:53:34,936  INFO  backend.llm.response_generator  RESPONSE_RAW  response='Thank you for sharing all that with me. Can you tell me a bit about how your skin feels lately? Is it more dry, oily, or maybe something else?'
+2026-04-15 09:53:34,938  INFO  backend.llm.response_generator  RESPONSE_OK  move_type=question  len=142
+2026-04-15 09:53:34,939  INFO  backend.agent.nodes.response_gen  RESPONSE_GEN_EXIT  response_len=142  was_blended=False
+2026-04-15 09:53:34,949  INFO  backend.agent.nodes.safety  SAFETY_ENTRY  response_len=142  turn=5  questions_asked=7
+2026-04-15 09:53:34,950  INFO  backend.agent.nodes.safety  SAFETY_ESCALATION_CHECK  info_count=10  keys=['Hairfall', 'Weight_Gain', 'Acne', 'Age', 'Sex', 'Menstrual_Regularity', 'Menstrual_Bleeding', 'Weight_Distribution', 'Fatigue', 'Cold_Intolerance']
+2026-04-15 09:53:35,677  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:53:35,705  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=754ms  in=180  out=14  finish_reason=stop  max_tokens=60
+2026-04-15 09:53:35,707  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=safety.escalation_check  model=gpt-4.1-mini  in=180  out=14  cost=$0.00009440
+2026-04-15 09:53:35,707  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 30 | Successes: 30 | Retries: 0 | Failures: 0 | Total Output Tokens: 3031
+2026-04-15 09:53:35,707  INFO  backend.llm.client  LLM_CALL  caller=safety.escalation_check    provider=openai    model=gpt-4.1-mini                    status=OK  latency=    757ms  in_tokens=179     out_tokens=21      cost=$0.000105  max_tokens=60
+2026-04-15 09:53:35,707  INFO  backend.agent.nodes.safety  SAFETY_ESCALATION_RESULT  decision=NO  reason='Symptoms suggest hormonal imbalance but do not indicate immediate medical emergency.'
+2026-04-15 09:53:35,708  INFO  backend.agent.nodes.safety  SAFETY_EXIT  final_len=142  turn=6  new_questions=2  last_question=skin texture
+2026-04-15 09:53:35,709  INFO  backend.session.manager  SESSION_MESSAGE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  message_len=38  response_len=142  phase=narrowing  turn=6
+2026-04-15 09:53:35,710  INFO  backend.api.websocket  WS_RESPONSE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  response_len=142  phase=narrowing
+2026-04-15 09:54:45,007  INFO  backend.api.websocket  WS_MESSAGE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  message_len=23
+2026-04-15 09:54:45,011  INFO  backend.agent.nodes.intake  INTAKE_ENTRY  message_len=23  last_gap=skin texture  existing_facts=10
+2026-04-15 09:54:45,011  INFO  backend.llm.intent_classifier  INTENT_REQ  message_len=23  last_gap=skin texture
+2026-04-15 09:54:45,015  INFO  backend.llm.fact_extractor  EXTRACT_REQ  message_len=23  last_topic=skin texture  existing_facts=10
+2026-04-15 09:54:45,600  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:54:45,609  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=597ms  in=264  out=2  finish_reason=stop  max_tokens=10
+2026-04-15 09:54:45,611  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=intent_classifier  model=gpt-4.1-mini  in=264  out=2  cost=$0.00010880
+2026-04-15 09:54:45,611  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 32 | Successes: 31 | Retries: 0 | Failures: 0 | Total Output Tokens: 3033
+2026-04-15 09:54:45,611  INFO  backend.llm.client  LLM_CALL  caller=intent_classifier          provider=openai    model=gpt-4.1-mini                    status=OK  latency=    600ms  in_tokens=284     out_tokens=2       cost=$0.000117  max_tokens=10
+2026-04-15 09:54:45,612  INFO  backend.llm.intent_classifier  INTENT_RAW  raw_response='answering'  parsed='answering'
+2026-04-15 09:54:45,612  INFO  backend.llm.intent_classifier  INTENT_OK  result=answering
+2026-04-15 09:54:45,856  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:54:45,864  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=849ms  in=374  out=28  finish_reason=stop  max_tokens=512
+2026-04-15 09:54:45,865  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=fact_extractor  model=gpt-4.1-mini  in=374  out=28  cost=$0.00019440
+2026-04-15 09:54:45,865  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 32 | Successes: 32 | Retries: 0 | Failures: 0 | Total Output Tokens: 3061
+2026-04-15 09:54:45,866  INFO  backend.llm.client  LLM_CALL  caller=fact_extractor             provider=openai    model=gpt-4.1-mini                    status=OK  latency=    850ms  in_tokens=368     out_tokens=22      cost=$0.000182  max_tokens=512
+2026-04-15 09:54:45,866  INFO  backend.llm.fact_extractor  EXTRACT_RAW  response='[{"key": "Skin_Texture", "value": "usually oily", "denied": false, "confidence": "high"}]'
+2026-04-15 09:54:45,867  INFO  backend.llm.fact_extractor  EXTRACT_OK  facts_count=1  facts=[('Skin_Texture', 'usually oily', 'high')]
+2026-04-15 09:54:45,867  INFO  backend.agent.nodes.intake  INTAKE_INTENT  result=answering
+2026-04-15 09:54:45,867  INFO  backend.agent.nodes.intake  INTAKE_FACTS  count=1  keys=['Skin_Texture']
+2026-04-15 09:54:45,867  INFO  backend.agent.nodes.intake  INTAKE_EXIT  intent=answering  fact_count=1  volunteered=1  pending_explanation=False
+2026-04-15 09:54:45,869  INFO  backend.agent.routing  ROUTE_DECISION  intent=answering  destination=reason
+2026-04-15 09:54:45,871  INFO  backend.agent.nodes.reason  REASON_ENTRY  turn=6  phase=narrowing  intake_facts=1  info_count=10
+2026-04-15 09:54:45,873  INFO  backend.agent.nodes.reason  REASON_MERGE  new_denied=[]  info_count=11  unconfirmed=0
+2026-04-15 09:54:45,873  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=meningitis_triad  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:54:45,873  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=acute_mi_pattern  score=0  soft=2  hard=3  state=clear
+2026-04-15 09:54:45,874  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=subarachnoid_haemorrhage  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:54:45,874  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pulmonary_embolism_pattern  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:54:45,874  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=stroke_pattern  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:54:45,874  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=surgical_abdomen  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:54:45,876  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pyelonephritis_urosepsis  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:54:45,876  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=dengue_meningococcaemia  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:54:45,877  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=cardiac_syncope  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:54:45,877  INFO  backend.llm.clinical_reasoner  REASONER_REQ  turn=6  info_count=11
+2026-04-15 09:54:49,932  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:54:49,941  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=4063ms  in=700  out=444  finish_reason=stop  max_tokens=512
+2026-04-15 09:54:49,943  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=clinical_reasoner  model=gpt-4.1-mini  in=700  out=444  cost=$0.00099040
+2026-04-15 09:54:49,944  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 33 | Successes: 33 | Retries: 0 | Failures: 0 | Total Output Tokens: 3505
+2026-04-15 09:54:49,944  INFO  backend.llm.client  LLM_CALL  caller=clinical_reasoner          provider=openai    model=gpt-4.1-mini                    status=OK  latency=   4066ms  in_tokens=793     out_tokens=447     cost=$0.001032  max_tokens=512
+2026-04-15 09:54:49,945  INFO  backend.llm.clinical_reasoner  REASONER_RAW  response_len=1789
+2026-04-15 09:54:49,945  INFO  backend.llm.clinical_reasoner  REASONER_OK  hypotheses=5  top=Hypothyroidism(0.75)  next_q=menstrual pain  confidence=moderate  summarize=False
+2026-04-15 09:54:49,946  INFO  backend.agent.nodes.reason  REASON_HYPOTHESIS  leading=Hypothyroidism  score=0.750  differential=2  ruled_out=2
+2026-04-15 09:54:49,946  INFO  backend.agent.nodes.reason  REASON_EXIT  phase=narrowing  info=11  gaps=['menstrual pain']  hypothesis=Hypothyroidism(0.750)  confidence=moderate
+2026-04-15 09:54:49,950  INFO  backend.agent.nodes.flow_control  FLOW_ENTRY  phase=narrowing  intent=answering  info_count=11  gaps=1  confirmed_rf=0  ending=none  closing_turn=0
+2026-04-15 09:54:49,951  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=meningitis_triad  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:54:49,952  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=acute_mi_pattern  score=0  soft=2  hard=3  state=clear
+2026-04-15 09:54:49,952  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=subarachnoid_haemorrhage  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:54:49,952  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pulmonary_embolism_pattern  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:54:49,952  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=stroke_pattern  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:54:49,953  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=surgical_abdomen  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:54:49,953  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pyelonephritis_urosepsis  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:54:49,953  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=dengue_meningococcaemia  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:54:49,954  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=cardiac_syncope  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:54:49,955  INFO  backend.agent.nodes.flow_control  FLOW_MOVE  type=question  target=menstrual pain  ask_count=1
+2026-04-15 09:54:49,957  INFO  backend.agent.nodes.response_gen  RESPONSE_GEN_ENTRY  move_type=question  pending_explanation=False  intent=answering
+2026-04-15 09:54:49,958  INFO  backend.llm.response_generator  RESPONSE_REQ  move_type=question  target_gap=menstrual pain  red_flag_id=(none)
+2026-04-15 09:54:50,757  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:54:50,769  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=809ms  in=287  out=28  finish_reason=stop  max_tokens=200
+2026-04-15 09:54:50,770  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=response_generator  model=gpt-4.1-mini  in=287  out=28  cost=$0.00015960
+2026-04-15 09:54:50,770  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 34 | Successes: 34 | Retries: 0 | Failures: 0 | Total Output Tokens: 3533
+2026-04-15 09:54:50,770  INFO  backend.llm.client  LLM_CALL  caller=response_generator         provider=openai    model=gpt-4.1-mini                    status=OK  latency=    811ms  in_tokens=302     out_tokens=37      cost=$0.000180  max_tokens=200
+2026-04-15 09:54:50,771  INFO  backend.llm.response_generator  RESPONSE_RAW  response="I understand you've mentioned your periods are heavy and sometimes vary a bit. Do you also experience any pain or cramping during your menstrual cycle?"
+2026-04-15 09:54:50,771  INFO  backend.llm.response_generator  RESPONSE_OK  move_type=question  len=151
+2026-04-15 09:54:50,771  INFO  backend.agent.nodes.response_gen  RESPONSE_GEN_EXIT  response_len=151  was_blended=False
+2026-04-15 09:54:50,774  INFO  backend.agent.nodes.safety  SAFETY_ENTRY  response_len=151  turn=6  questions_asked=9
+2026-04-15 09:54:50,776  INFO  backend.agent.nodes.safety  SAFETY_ESCALATION_CHECK  info_count=11  keys=['Hairfall', 'Weight_Gain', 'Acne', 'Age', 'Sex', 'Menstrual_Regularity', 'Menstrual_Bleeding', 'Weight_Distribution', 'Fatigue', 'Cold_Intolerance', 'Skin_Texture']
+2026-04-15 09:54:51,371  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:54:51,377  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=600ms  in=187  out=14  finish_reason=stop  max_tokens=60
+2026-04-15 09:54:51,380  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=safety.escalation_check  model=gpt-4.1-mini  in=187  out=14  cost=$0.00009720
+2026-04-15 09:54:51,381  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 35 | Successes: 35 | Retries: 0 | Failures: 0 | Total Output Tokens: 3547
+2026-04-15 09:54:51,381  INFO  backend.llm.client  LLM_CALL  caller=safety.escalation_check    provider=openai    model=gpt-4.1-mini                    status=OK  latency=    605ms  in_tokens=187     out_tokens=21      cost=$0.000108  max_tokens=60
+2026-04-15 09:54:51,382  INFO  backend.agent.nodes.safety  SAFETY_ESCALATION_RESULT  decision=NO  reason='Symptoms suggest hormonal imbalance but do not indicate immediate medical emergency.'
+2026-04-15 09:54:51,383  INFO  backend.agent.nodes.safety  SAFETY_EXIT  final_len=151  turn=7  new_questions=1  last_question=menstrual pain
+2026-04-15 09:54:51,391  INFO  backend.session.manager  SESSION_MESSAGE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  message_len=23  response_len=151  phase=narrowing  turn=7
+2026-04-15 09:54:51,394  INFO  backend.api.websocket  WS_RESPONSE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  response_len=151  phase=narrowing
+2026-04-15 09:55:21,155  INFO  backend.api.websocket  WS_MESSAGE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  message_len=26
+2026-04-15 09:55:21,159  INFO  backend.agent.nodes.intake  INTAKE_ENTRY  message_len=26  last_gap=menstrual pain  existing_facts=11
+2026-04-15 09:55:21,159  INFO  backend.llm.intent_classifier  INTENT_REQ  message_len=26  last_gap=menstrual pain
+2026-04-15 09:55:21,165  INFO  backend.llm.fact_extractor  EXTRACT_REQ  message_len=26  last_topic=menstrual pain  existing_facts=11
+2026-04-15 09:55:21,696  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:55:21,703  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=543ms  in=266  out=2  finish_reason=stop  max_tokens=10
+2026-04-15 09:55:21,704  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=intent_classifier  model=gpt-4.1-mini  in=266  out=2  cost=$0.00010960
+2026-04-15 09:55:21,705  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 37 | Successes: 36 | Retries: 0 | Failures: 0 | Total Output Tokens: 3549
+2026-04-15 09:55:21,705  INFO  backend.llm.client  LLM_CALL  caller=intent_classifier          provider=openai    model=gpt-4.1-mini                    status=OK  latency=    545ms  in_tokens=285     out_tokens=2       cost=$0.000117  max_tokens=10
+2026-04-15 09:55:21,705  INFO  backend.llm.intent_classifier  INTENT_RAW  raw_response='answering'  parsed='answering'
+2026-04-15 09:55:21,706  INFO  backend.llm.intent_classifier  INTENT_OK  result=answering
+2026-04-15 09:55:22,443  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:55:22,451  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=1286ms  in=382  out=32  finish_reason=stop  max_tokens=512
+2026-04-15 09:55:22,454  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=fact_extractor  model=gpt-4.1-mini  in=382  out=32  cost=$0.00020400
+2026-04-15 09:55:22,455  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 37 | Successes: 37 | Retries: 0 | Failures: 0 | Total Output Tokens: 3581
+2026-04-15 09:55:22,456  INFO  backend.llm.client  LLM_CALL  caller=fact_extractor             provider=openai    model=gpt-4.1-mini                    status=OK  latency=   1290ms  in_tokens=376     out_tokens=24      cost=$0.000189  max_tokens=512
+2026-04-15 09:55:22,456  INFO  backend.llm.fact_extractor  EXTRACT_RAW  response='[{"key": "Menstrual_Pain", "value": "pain is very much", "denied": false, "confidence": "high"}]'
+2026-04-15 09:55:22,457  INFO  backend.llm.fact_extractor  EXTRACT_OK  facts_count=1  facts=[('Menstrual_Pain', 'pain is very much', 'high')]
+2026-04-15 09:55:22,458  INFO  backend.agent.nodes.intake  INTAKE_INTENT  result=answering
+2026-04-15 09:55:22,459  INFO  backend.agent.nodes.intake  INTAKE_FACTS  count=1  keys=['Menstrual_Pain']
+2026-04-15 09:55:22,460  INFO  backend.agent.nodes.intake  INTAKE_EXIT  intent=answering  fact_count=1  volunteered=1  pending_explanation=False
+2026-04-15 09:55:22,462  INFO  backend.agent.routing  ROUTE_DECISION  intent=answering  destination=reason
+2026-04-15 09:55:22,468  INFO  backend.agent.nodes.reason  REASON_ENTRY  turn=7  phase=narrowing  intake_facts=1  info_count=11
+2026-04-15 09:55:22,469  INFO  backend.agent.nodes.reason  REASON_MERGE  new_denied=[]  info_count=12  unconfirmed=0
+2026-04-15 09:55:22,470  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=meningitis_triad  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:55:22,471  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=acute_mi_pattern  score=0  soft=2  hard=3  state=clear
+2026-04-15 09:55:22,471  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=subarachnoid_haemorrhage  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:55:22,472  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pulmonary_embolism_pattern  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:55:22,473  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=stroke_pattern  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:55:22,474  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=surgical_abdomen  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:55:22,474  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pyelonephritis_urosepsis  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:55:22,475  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=dengue_meningococcaemia  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:55:22,476  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=cardiac_syncope  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:55:22,477  INFO  backend.llm.clinical_reasoner  REASONER_REQ  turn=7  info_count=12
+2026-04-15 09:55:27,386  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:55:27,390  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=4913ms  in=699  out=481  finish_reason=stop  max_tokens=512
+2026-04-15 09:55:27,393  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=clinical_reasoner  model=gpt-4.1-mini  in=699  out=481  cost=$0.00104920
+2026-04-15 09:55:27,394  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 38 | Successes: 38 | Retries: 0 | Failures: 0 | Total Output Tokens: 4062
+2026-04-15 09:55:27,395  INFO  backend.llm.client  LLM_CALL  caller=clinical_reasoner          provider=openai    model=gpt-4.1-mini                    status=OK  latency=   4918ms  in_tokens=784     out_tokens=472     cost=$0.001069  max_tokens=512
+2026-04-15 09:55:27,396  INFO  backend.llm.clinical_reasoner  REASONER_RAW  response_len=1890
+2026-04-15 09:55:27,397  INFO  backend.llm.clinical_reasoner  REASONER_OK  hypotheses=5  top=Hypothyroidism(0.80)  next_q=skin temperature changes  confidence=moderate  summarize=False
+2026-04-15 09:55:27,398  INFO  backend.agent.nodes.reason  REASON_HYPOTHESIS  leading=Hypothyroidism  score=0.800  differential=2  ruled_out=2
+2026-04-15 09:55:27,398  INFO  backend.agent.nodes.reason  REASON_EXIT  phase=narrowing  info=12  gaps=['skin temperature changes']  hypothesis=Hypothyroidism(0.800)  confidence=moderate
+2026-04-15 09:55:27,404  INFO  backend.agent.nodes.flow_control  FLOW_ENTRY  phase=narrowing  intent=answering  info_count=12  gaps=1  confirmed_rf=0  ending=none  closing_turn=0
+2026-04-15 09:55:27,404  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=meningitis_triad  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:55:27,404  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=acute_mi_pattern  score=0  soft=2  hard=3  state=clear
+2026-04-15 09:55:27,405  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=subarachnoid_haemorrhage  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:55:27,405  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pulmonary_embolism_pattern  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:55:27,405  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=stroke_pattern  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:55:27,405  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=surgical_abdomen  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:55:27,406  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pyelonephritis_urosepsis  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:55:27,406  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=dengue_meningococcaemia  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:55:27,407  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=cardiac_syncope  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:55:27,408  INFO  backend.agent.nodes.flow_control  FLOW_MOVE  type=question  target=skin temperature changes  ask_count=1
+2026-04-15 09:55:27,413  INFO  backend.agent.nodes.response_gen  RESPONSE_GEN_ENTRY  move_type=question  pending_explanation=False  intent=answering
+2026-04-15 09:55:27,413  INFO  backend.llm.response_generator  RESPONSE_REQ  move_type=question  target_gap=skin temperature changes  red_flag_id=(none)
+2026-04-15 09:55:28,383  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:55:28,386  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=972ms  in=310  out=43  finish_reason=stop  max_tokens=200
+2026-04-15 09:55:28,389  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=response_generator  model=gpt-4.1-mini  in=310  out=43  cost=$0.00019280
+2026-04-15 09:55:28,391  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 39 | Successes: 39 | Retries: 0 | Failures: 0 | Total Output Tokens: 4105
+2026-04-15 09:55:28,392  INFO  backend.llm.client  LLM_CALL  caller=response_generator         provider=openai    model=gpt-4.1-mini                    status=OK  latency=    978ms  in_tokens=322     out_tokens=47      cost=$0.000204  max_tokens=200
+2026-04-15 09:55:28,393  INFO  backend.llm.response_generator  RESPONSE_RAW  response='Thank you for sharing all that with me. I’d like to ask, have you noticed any changes in how warm or cool your skin feels lately? For example, does your skin feel colder or warmer than usual?'
+2026-04-15 09:55:28,394  INFO  backend.llm.response_generator  RESPONSE_OK  move_type=question  len=191
+2026-04-15 09:55:28,399  INFO  backend.agent.nodes.response_gen  RESPONSE_GEN_EXIT  response_len=191  was_blended=False
+2026-04-15 09:55:28,406  INFO  backend.agent.nodes.safety  SAFETY_ENTRY  response_len=191  turn=7  questions_asked=10
+2026-04-15 09:55:28,409  INFO  backend.agent.nodes.safety  SAFETY_ESCALATION_CHECK  info_count=12  keys=['Hairfall', 'Weight_Gain', 'Acne', 'Age', 'Sex', 'Menstrual_Regularity', 'Menstrual_Bleeding', 'Weight_Distribution', 'Fatigue', 'Cold_Intolerance', 'Skin_Texture', 'Menstrual_Pain']
+2026-04-15 09:55:29,049  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:55:29,051  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=641ms  in=198  out=21  finish_reason=stop  max_tokens=60
+2026-04-15 09:55:29,053  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=safety.escalation_check  model=gpt-4.1-mini  in=198  out=21  cost=$0.00011280
+2026-04-15 09:55:29,054  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 40 | Successes: 40 | Retries: 0 | Failures: 0 | Total Output Tokens: 4126
+2026-04-15 09:55:29,055  INFO  backend.llm.client  LLM_CALL  caller=safety.escalation_check    provider=openai    model=gpt-4.1-mini                    status=OK  latency=    645ms  in_tokens=196     out_tokens=35      cost=$0.000134  max_tokens=60
+2026-04-15 09:55:29,055  INFO  backend.agent.nodes.safety  SAFETY_ESCALATION_RESULT  decision=YES  reason='Heavy menstrual bleeding with severe pain and fatigue may indicate a serious underlying condition requiring immediate medical evaluation.'
+2026-04-15 09:55:29,056  WARNING  backend.agent.nodes.safety  SAFETY_ESCALATION_TRIGGERED  appended_warning  reason='Heavy menstrual bleeding with severe pain and fatigue may indicate a serious underlying condition requiring immediate medical evaluation.'
+2026-04-15 09:55:29,056  INFO  backend.agent.nodes.safety  SAFETY_EXIT  final_len=425  turn=8  new_questions=2  last_question=skin temperature changes
+2026-04-15 09:55:29,060  INFO  backend.session.manager  SESSION_MESSAGE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  message_len=26  response_len=425  phase=narrowing  turn=8
+2026-04-15 09:55:29,061  INFO  backend.api.websocket  WS_RESPONSE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  response_len=425  phase=narrowing
+2026-04-15 09:55:51,307  INFO  backend.api.websocket  WS_MESSAGE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  message_len=15
+2026-04-15 09:55:51,311  INFO  backend.agent.nodes.intake  INTAKE_ENTRY  message_len=15  last_gap=skin temperature changes  existing_facts=12
+2026-04-15 09:55:51,312  INFO  backend.llm.intent_classifier  INTENT_REQ  message_len=15  last_gap=skin temperature changes
+2026-04-15 09:55:51,315  INFO  backend.llm.fact_extractor  EXTRACT_REQ  message_len=15  last_topic=skin temperature changes  existing_facts=12
+2026-04-15 09:55:51,853  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:55:51,859  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=546ms  in=263  out=2  finish_reason=stop  max_tokens=10
+2026-04-15 09:55:51,863  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=intent_classifier  model=gpt-4.1-mini  in=263  out=2  cost=$0.00010840
+2026-04-15 09:55:51,865  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 42 | Successes: 41 | Retries: 0 | Failures: 0 | Total Output Tokens: 4128
+2026-04-15 09:55:51,867  INFO  backend.llm.client  LLM_CALL  caller=intent_classifier          provider=openai    model=gpt-4.1-mini                    status=OK  latency=    555ms  in_tokens=285     out_tokens=2       cost=$0.000117  max_tokens=10
+2026-04-15 09:55:51,870  INFO  backend.llm.intent_classifier  INTENT_RAW  raw_response='answering'  parsed='answering'
+2026-04-15 09:55:51,872  INFO  backend.llm.intent_classifier  INTENT_OK  result=answering
+2026-04-15 09:55:52,497  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:55:52,510  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=1194ms  in=389  out=33  finish_reason=stop  max_tokens=512
+2026-04-15 09:55:52,512  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=fact_extractor  model=gpt-4.1-mini  in=389  out=33  cost=$0.00020840
+2026-04-15 09:55:52,513  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 42 | Successes: 42 | Retries: 0 | Failures: 0 | Total Output Tokens: 4161
+2026-04-15 09:55:52,513  INFO  backend.llm.client  LLM_CALL  caller=fact_extractor             provider=openai    model=gpt-4.1-mini                    status=OK  latency=   1197ms  in_tokens=385     out_tokens=25      cost=$0.000194  max_tokens=512
+2026-04-15 09:55:52,513  INFO  backend.llm.fact_extractor  EXTRACT_RAW  response='[{"key": "Skin_Temperature_Changes", "value": "feels colder", "denied": false, "confidence": "high"}]'
+2026-04-15 09:55:52,514  INFO  backend.llm.fact_extractor  EXTRACT_OK  facts_count=1  facts=[('Skin_Temperature_Changes', 'feels colder', 'high')]
+2026-04-15 09:55:52,514  INFO  backend.agent.nodes.intake  INTAKE_INTENT  result=answering
+2026-04-15 09:55:52,515  INFO  backend.agent.nodes.intake  INTAKE_FACTS  count=1  keys=['Skin_Temperature_Changes']
+2026-04-15 09:55:52,515  INFO  backend.agent.nodes.intake  INTAKE_EXIT  intent=answering  fact_count=1  volunteered=1  pending_explanation=False
+2026-04-15 09:55:52,516  INFO  backend.agent.routing  ROUTE_DECISION  intent=answering  destination=reason
+2026-04-15 09:55:52,519  INFO  backend.agent.nodes.reason  REASON_ENTRY  turn=8  phase=narrowing  intake_facts=1  info_count=12
+2026-04-15 09:55:52,519  INFO  backend.agent.nodes.reason  REASON_MERGE  new_denied=[]  info_count=13  unconfirmed=0
+2026-04-15 09:55:52,520  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=meningitis_triad  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:55:52,520  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=acute_mi_pattern  score=0  soft=2  hard=3  state=clear
+2026-04-15 09:55:52,520  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=subarachnoid_haemorrhage  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:55:52,520  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pulmonary_embolism_pattern  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:55:52,520  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=stroke_pattern  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:55:52,521  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=surgical_abdomen  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:55:52,521  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pyelonephritis_urosepsis  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:55:52,521  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=dengue_meningococcaemia  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:55:52,521  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=cardiac_syncope  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:55:52,529  INFO  backend.llm.clinical_reasoner  REASONER_REQ  turn=8  info_count=13
+2026-04-15 09:55:56,880  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:55:56,887  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=4358ms  in=746  out=414  finish_reason=stop  max_tokens=512
+2026-04-15 09:55:56,889  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=clinical_reasoner  model=gpt-4.1-mini  in=746  out=414  cost=$0.00096080
+2026-04-15 09:55:56,890  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 43 | Successes: 43 | Retries: 0 | Failures: 0 | Total Output Tokens: 4575
+2026-04-15 09:55:56,891  INFO  backend.llm.client  LLM_CALL  caller=clinical_reasoner          provider=openai    model=gpt-4.1-mini                    status=OK  latency=   4361ms  in_tokens=837     out_tokens=403     cost=$0.000980  max_tokens=512
+2026-04-15 09:55:56,892  INFO  backend.llm.clinical_reasoner  REASONER_RAW  response_len=1612
+2026-04-15 09:55:56,893  INFO  backend.llm.clinical_reasoner  REASONER_OK  hypotheses=5  top=Hypothyroidism(0.85)  next_q=weight distribution  confidence=moderate  summarize=False
+2026-04-15 09:55:56,895  INFO  backend.agent.nodes.reason  REASON_HYPOTHESIS  leading=Hypothyroidism  score=0.850  differential=1  ruled_out=3
+2026-04-15 09:55:56,895  INFO  backend.agent.nodes.reason  REASON_EXIT  phase=narrowing  info=13  gaps=['weight distribution']  hypothesis=Hypothyroidism(0.850)  confidence=moderate
+2026-04-15 09:55:56,903  INFO  backend.agent.nodes.flow_control  FLOW_ENTRY  phase=narrowing  intent=answering  info_count=13  gaps=1  confirmed_rf=0  ending=none  closing_turn=0
+2026-04-15 09:55:56,904  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=meningitis_triad  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:55:56,904  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=acute_mi_pattern  score=0  soft=2  hard=3  state=clear
+2026-04-15 09:55:56,905  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=subarachnoid_haemorrhage  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:55:56,905  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pulmonary_embolism_pattern  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:55:56,906  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=stroke_pattern  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:55:56,907  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=surgical_abdomen  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:55:56,907  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pyelonephritis_urosepsis  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:55:56,907  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=dengue_meningococcaemia  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:55:56,907  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=cardiac_syncope  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:55:56,908  INFO  backend.agent.nodes.flow_control  FLOW_SKIP_GAP  gap=weight distribution  ask_count=2  max=2
+2026-04-15 09:55:56,908  INFO  backend.agent.nodes.flow_control  FLOW_MOVE  type=summarize  reason=no_gaps_fallback
+2026-04-15 09:55:56,910  INFO  backend.agent.nodes.response_gen  RESPONSE_GEN_ENTRY  move_type=summarize  pending_explanation=False  intent=answering
+2026-04-15 09:55:56,911  INFO  backend.llm.summarizer  SUMMARY_REQ  info_count=13  denied_count=0  red_flags=(none)  has_hypothesis=True
+2026-04-15 09:56:00,093  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:56:00,100  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=3189ms  in=359  out=316  finish_reason=stop  max_tokens=1024
+2026-04-15 09:56:00,102  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=summarizer  model=gpt-4.1-mini  in=359  out=316  cost=$0.00064920
+2026-04-15 09:56:00,103  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 44 | Successes: 44 | Retries: 0 | Failures: 0 | Total Output Tokens: 4891
+2026-04-15 09:56:00,103  INFO  backend.llm.client  LLM_CALL  caller=summarizer                 provider=openai    model=gpt-4.1-mini                    status=OK  latency=   3192ms  in_tokens=382     out_tokens=371     cost=$0.000746  max_tokens=1024
+2026-04-15 09:56:00,103  INFO  backend.llm.summarizer  SUMMARY_RAW  response='## Symptoms Reported\n- Hairfall\n- Weight gain, mostly around hips with a bloated feeling\n- Sudden increase in acne\n- Regular menstrual cycles lasting 2-3 days but with heavy bleeding\n- Significant menstrual pain\n- Feeling more tired than usual despite adequate food intake\n- Increased sensitivity to cold, especially to air conditioning\n- Oily skin texture\n- Skin feels colder than usual\n\n## Key Findings\n- Female, 21 years old\n- Menstrual irregularity in duration (2-3 days) but regular cycles\n- Hea'
+2026-04-15 09:56:00,104  INFO  backend.llm.summarizer  SUMMARY_OK  response_len=1684  (with disclaimer)
+2026-04-15 09:56:00,108  INFO  backend.agent.nodes.safety  SAFETY_ENTRY  response_len=1684  turn=8  questions_asked=12
+2026-04-15 09:56:00,111  INFO  backend.agent.nodes.safety  SAFETY_ESCALATION_CHECK  info_count=13  keys=['Hairfall', 'Weight_Gain', 'Acne', 'Age', 'Sex', 'Menstrual_Regularity', 'Menstrual_Bleeding', 'Weight_Distribution', 'Fatigue', 'Cold_Intolerance', 'Skin_Texture', 'Menstrual_Pain', 'Skin_Temperature_Changes']
+2026-04-15 09:56:00,713  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:56:00,715  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=604ms  in=209  out=14  finish_reason=stop  max_tokens=60
+2026-04-15 09:56:00,718  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=safety.escalation_check  model=gpt-4.1-mini  in=209  out=14  cost=$0.00010600
+2026-04-15 09:56:00,718  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 45 | Successes: 45 | Retries: 0 | Failures: 0 | Total Output Tokens: 4905
+2026-04-15 09:56:00,718  INFO  backend.llm.client  LLM_CALL  caller=safety.escalation_check    provider=openai    model=gpt-4.1-mini                    status=OK  latency=    606ms  in_tokens=206     out_tokens=25      cost=$0.000122  max_tokens=60
+2026-04-15 09:56:00,719  INFO  backend.agent.nodes.safety  SAFETY_ESCALATION_RESULT  decision=YES  reason='Symptoms suggest possible hormonal imbalance or thyroid dysfunction requiring urgent evaluation.'
+2026-04-15 09:56:00,719  WARNING  backend.agent.nodes.safety  SAFETY_ESCALATION_TRIGGERED  appended_warning  reason='Symptoms suggest possible hormonal imbalance or thyroid dysfunction requiring urgent evaluation.'
+2026-04-15 09:56:00,720  INFO  backend.agent.nodes.safety  SAFETY_EXIT  final_len=1877  turn=9  new_questions=0  last_question=(none)
+2026-04-15 09:56:00,723  INFO  backend.session.manager  SESSION_MESSAGE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  message_len=15  response_len=1877  phase=narrowing  turn=9
+2026-04-15 09:56:00,724  INFO  backend.api.websocket  WS_RESPONSE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  response_len=1877  phase=narrowing
+2026-04-15 09:56:42,196  INFO  backend.api.websocket  WS_MESSAGE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  message_len=47
+2026-04-15 09:56:42,201  INFO  backend.agent.nodes.intake  INTAKE_ENTRY  message_len=47  last_gap=(none)  existing_facts=13
+2026-04-15 09:56:42,202  INFO  backend.llm.intent_classifier  INTENT_REQ  message_len=47  last_gap=(none)
+2026-04-15 09:56:42,206  INFO  backend.llm.fact_extractor  EXTRACT_REQ  message_len=47  last_topic=(none)  existing_facts=13
+2026-04-15 09:56:42,898  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:56:42,901  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=695ms  in=408  out=1  finish_reason=stop  max_tokens=512
+2026-04-15 09:56:42,904  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=fact_extractor  model=gpt-4.1-mini  in=408  out=1  cost=$0.00016480
+2026-04-15 09:56:42,905  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 47 | Successes: 46 | Retries: 0 | Failures: 0 | Total Output Tokens: 4906
+2026-04-15 09:56:42,905  INFO  backend.llm.client  LLM_CALL  caller=fact_extractor             provider=openai    model=gpt-4.1-mini                    status=OK  latency=    699ms  in_tokens=400     out_tokens=1       cost=$0.000162  max_tokens=512
+2026-04-15 09:56:42,906  INFO  backend.llm.fact_extractor  EXTRACT_RAW  response='[]'
+2026-04-15 09:56:42,906  INFO  backend.llm.fact_extractor  EXTRACT_OK  facts_count=0  facts=[]
+2026-04-15 09:56:42,925  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:56:42,935  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=732ms  in=269  out=3  finish_reason=stop  max_tokens=10
+2026-04-15 09:56:42,936  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=intent_classifier  model=gpt-4.1-mini  in=269  out=3  cost=$0.00011240
+2026-04-15 09:56:42,937  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 47 | Successes: 47 | Retries: 0 | Failures: 0 | Total Output Tokens: 4909
+2026-04-15 09:56:42,938  INFO  backend.llm.client  LLM_CALL  caller=intent_classifier          provider=openai    model=gpt-4.1-mini                    status=OK  latency=    736ms  in_tokens=287     out_tokens=4       cost=$0.000121  max_tokens=10
+2026-04-15 09:56:42,938  INFO  backend.llm.intent_classifier  INTENT_RAW  raw_response='asking_explanation'  parsed='asking_explanation'
+2026-04-15 09:56:42,939  INFO  backend.llm.intent_classifier  INTENT_OK  result=asking_explanation
+2026-04-15 09:56:42,941  INFO  backend.agent.nodes.intake  INTAKE_INTENT  result=asking_explanation
+2026-04-15 09:56:42,942  INFO  backend.agent.nodes.intake  INTAKE_FACTS  count=0  keys=[]
+2026-04-15 09:56:42,942  INFO  backend.agent.nodes.intake  INTAKE_EXPLANATION  discarded_facts  pending_set
+2026-04-15 09:56:42,943  INFO  backend.agent.nodes.intake  INTAKE_EXIT  intent=asking_explanation  fact_count=0  volunteered=0  pending_explanation=True
+2026-04-15 09:56:42,945  INFO  backend.agent.routing  ROUTE_DECISION  intent=asking_explanation  destination=reason
+2026-04-15 09:56:42,947  INFO  backend.agent.nodes.reason  REASON_ENTRY  turn=9  phase=narrowing  intake_facts=0  info_count=13
+2026-04-15 09:56:42,947  INFO  backend.agent.nodes.reason  REASON_MERGE  new_denied=[]  info_count=13  unconfirmed=0
+2026-04-15 09:56:42,948  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=meningitis_triad  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:56:42,948  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=acute_mi_pattern  score=0  soft=2  hard=3  state=clear
+2026-04-15 09:56:42,948  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=subarachnoid_haemorrhage  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:56:42,949  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pulmonary_embolism_pattern  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:56:42,949  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=stroke_pattern  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:56:42,949  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=surgical_abdomen  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:56:42,949  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pyelonephritis_urosepsis  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:56:42,949  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=dengue_meningococcaemia  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:56:42,949  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=cardiac_syncope  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:56:42,950  INFO  backend.llm.clinical_reasoner  REASONER_REQ  turn=9  info_count=13
+2026-04-15 09:56:48,387  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:56:48,389  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=5439ms  in=1074  out=442  finish_reason=stop  max_tokens=512
+2026-04-15 09:56:48,390  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=clinical_reasoner  model=gpt-4.1-mini  in=1074  out=442  cost=$0.00113680
+2026-04-15 09:56:48,391  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 48 | Successes: 48 | Retries: 0 | Failures: 0 | Total Output Tokens: 5351
+2026-04-15 09:56:48,392  INFO  backend.llm.client  LLM_CALL  caller=clinical_reasoner          provider=openai    model=gpt-4.1-mini                    status=OK  latency=   5441ms  in_tokens=1258    out_tokens=444     cost=$0.001214  max_tokens=512
+2026-04-15 09:56:48,392  INFO  backend.llm.clinical_reasoner  REASONER_RAW  response_len=1777
+2026-04-15 09:56:48,393  INFO  backend.llm.clinical_reasoner  REASONER_OK  hypotheses=5  top=Hypothyroidism(0.90)  next_q=weight distribution  confidence=moderate  summarize=False
+2026-04-15 09:56:48,394  INFO  backend.agent.nodes.reason  REASON_HYPOTHESIS  leading=Hypothyroidism  score=0.900  differential=1  ruled_out=3
+2026-04-15 09:56:48,394  INFO  backend.agent.nodes.reason  REASON_EXIT  phase=narrowing  info=13  gaps=[]  hypothesis=Hypothyroidism(0.900)  confidence=moderate
+2026-04-15 09:56:48,397  INFO  backend.agent.nodes.flow_control  FLOW_ENTRY  phase=narrowing  intent=asking_explanation  info_count=13  gaps=0  confirmed_rf=0  ending=none  closing_turn=0
+2026-04-15 09:56:48,398  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=meningitis_triad  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:56:48,398  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=acute_mi_pattern  score=0  soft=2  hard=3  state=clear
+2026-04-15 09:56:48,400  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=subarachnoid_haemorrhage  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:56:48,400  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pulmonary_embolism_pattern  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:56:48,401  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=stroke_pattern  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:56:48,401  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=surgical_abdomen  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:56:48,402  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pyelonephritis_urosepsis  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:56:48,402  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=dengue_meningococcaemia  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:56:48,402  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=cardiac_syncope  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:56:48,402  INFO  backend.agent.nodes.flow_control  FLOW_MOVE  type=explain  target=None
+2026-04-15 09:56:48,404  INFO  backend.agent.nodes.response_gen  RESPONSE_GEN_ENTRY  move_type=explain  pending_explanation=True  intent=asking_explanation
+2026-04-15 09:56:48,405  INFO  backend.llm.explainer  EXPLAIN_REQ  pending='How serious is this illness? \nCan it be reated?'  info_count=13  next_gap=(none)
+2026-04-15 09:56:49,881  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:56:49,888  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=1482ms  in=300  out=72  finish_reason=stop  max_tokens=256
+2026-04-15 09:56:49,890  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=explainer  model=gpt-4.1-mini  in=300  out=72  cost=$0.00023520
+2026-04-15 09:56:49,890  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 49 | Successes: 49 | Retries: 0 | Failures: 0 | Total Output Tokens: 5423
+2026-04-15 09:56:49,892  INFO  backend.llm.client  LLM_CALL  caller=explainer                  provider=openai    model=gpt-4.1-mini                    status=OK  latency=   1485ms  in_tokens=300     out_tokens=93      cost=$0.000269  max_tokens=256
+2026-04-15 09:56:49,892  INFO  backend.llm.explainer  EXPLAIN_RAW  response="I understand your concerns—many symptoms like hair loss, weight changes, and fatigue can feel worrying, but knowing more helps us find the right approach to support you. These signs often point to changes in your body that can be managed with proper care. To better understand your situation, could you tell me if you've noticed any changes in your appetite or thirst lately?"
+2026-04-15 09:56:49,893  INFO  backend.llm.explainer  EXPLAIN_OK  response_len=375
+2026-04-15 09:56:49,893  INFO  backend.agent.nodes.response_gen  RESPONSE_GEN_EXIT  response_len=375  was_blended=False
+2026-04-15 09:56:49,896  INFO  backend.agent.nodes.safety  SAFETY_ENTRY  response_len=375  turn=9  questions_asked=12
+2026-04-15 09:56:49,897  INFO  backend.agent.nodes.safety  SAFETY_BANNED  stripped_opener  original_len=375  new_len=349
+2026-04-15 09:56:49,899  INFO  backend.agent.nodes.safety  SAFETY_ESCALATION_CHECK  info_count=13  keys=['Hairfall', 'Weight_Gain', 'Acne', 'Age', 'Sex', 'Menstrual_Regularity', 'Menstrual_Bleeding', 'Weight_Distribution', 'Fatigue', 'Cold_Intolerance', 'Skin_Texture', 'Menstrual_Pain', 'Skin_Temperature_Changes']
+2026-04-15 09:56:50,547  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:56:50,555  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=654ms  in=209  out=15  finish_reason=stop  max_tokens=60
+2026-04-15 09:56:50,556  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=safety.escalation_check  model=gpt-4.1-mini  in=209  out=15  cost=$0.00010760
+2026-04-15 09:56:50,557  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 50 | Successes: 50 | Retries: 0 | Failures: 0 | Total Output Tokens: 5438
+2026-04-15 09:56:50,557  INFO  backend.llm.client  LLM_CALL  caller=safety.escalation_check    provider=openai    model=gpt-4.1-mini                    status=OK  latency=    656ms  in_tokens=206     out_tokens=24      cost=$0.000121  max_tokens=60
+2026-04-15 09:56:50,558  INFO  backend.agent.nodes.safety  SAFETY_ESCALATION_RESULT  decision=NO  reason='Symptoms suggest possible hormonal imbalance but do not indicate immediate medical emergency.'
+2026-04-15 09:56:50,560  INFO  backend.agent.nodes.safety  SAFETY_EXIT  final_len=349  turn=10  new_questions=1  last_question=(none)
+2026-04-15 09:56:50,563  INFO  backend.session.manager  SESSION_MESSAGE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  message_len=47  response_len=349  phase=narrowing  turn=10
+2026-04-15 09:56:50,565  INFO  backend.api.websocket  WS_RESPONSE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  response_len=349  phase=narrowing
+2026-04-15 09:57:05,943  INFO  backend.api.websocket  WS_MESSAGE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  message_len=10
+2026-04-15 09:57:05,946  INFO  backend.agent.nodes.intake  INTAKE_ENTRY  message_len=10  last_gap=(none)  existing_facts=13
+2026-04-15 09:57:05,947  INFO  backend.llm.intent_classifier  INTENT_REQ  message_len=10  last_gap=(none)
+2026-04-15 09:57:05,950  INFO  backend.llm.fact_extractor  EXTRACT_REQ  message_len=10  last_topic=(none)  existing_facts=13
+2026-04-15 09:57:06,564  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:57:06,570  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=623ms  in=259  out=1  finish_reason=stop  max_tokens=10
+2026-04-15 09:57:06,571  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=intent_classifier  model=gpt-4.1-mini  in=259  out=1  cost=$0.00010520
+2026-04-15 09:57:06,572  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 52 | Successes: 51 | Retries: 0 | Failures: 0 | Total Output Tokens: 5439
+2026-04-15 09:57:06,572  INFO  backend.llm.client  LLM_CALL  caller=intent_classifier          provider=openai    model=gpt-4.1-mini                    status=OK  latency=    625ms  in_tokens=277     out_tokens=2       cost=$0.000114  max_tokens=10
+2026-04-15 09:57:06,572  INFO  backend.llm.intent_classifier  INTENT_RAW  raw_response='terminate'  parsed='terminate'
+2026-04-15 09:57:06,573  INFO  backend.llm.intent_classifier  INTENT_OK  result=terminate
+2026-04-15 09:57:06,707  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:57:06,713  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=763ms  in=398  out=1  finish_reason=stop  max_tokens=512
+2026-04-15 09:57:06,715  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=fact_extractor  model=gpt-4.1-mini  in=398  out=1  cost=$0.00016080
+2026-04-15 09:57:06,716  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 52 | Successes: 52 | Retries: 0 | Failures: 0 | Total Output Tokens: 5440
+2026-04-15 09:57:06,717  INFO  backend.llm.client  LLM_CALL  caller=fact_extractor             provider=openai    model=gpt-4.1-mini                    status=OK  latency=    766ms  in_tokens=391     out_tokens=1       cost=$0.000158  max_tokens=512
+2026-04-15 09:57:06,717  INFO  backend.llm.fact_extractor  EXTRACT_RAW  response='[]'
+2026-04-15 09:57:06,717  INFO  backend.llm.fact_extractor  EXTRACT_OK  facts_count=0  facts=[]
+2026-04-15 09:57:06,718  INFO  backend.agent.nodes.intake  INTAKE_INTENT  result=terminate
+2026-04-15 09:57:06,719  INFO  backend.agent.nodes.intake  INTAKE_FACTS  count=0  keys=[]
+2026-04-15 09:57:06,720  INFO  backend.agent.nodes.intake  INTAKE_EXIT  intent=terminate  fact_count=0  volunteered=0  pending_explanation=False
+2026-04-15 09:57:06,721  INFO  backend.agent.routing  ROUTE_DECISION  intent=terminate  destination=reason
+2026-04-15 09:57:06,724  INFO  backend.agent.nodes.reason  REASON_ENTRY  turn=10  phase=narrowing  intake_facts=0  info_count=13
+2026-04-15 09:57:06,724  INFO  backend.agent.nodes.reason  REASON_MERGE  new_denied=[]  info_count=13  unconfirmed=0
+2026-04-15 09:57:06,724  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=meningitis_triad  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:57:06,725  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=acute_mi_pattern  score=0  soft=2  hard=3  state=clear
+2026-04-15 09:57:06,725  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=subarachnoid_haemorrhage  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:57:06,725  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pulmonary_embolism_pattern  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:57:06,726  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=stroke_pattern  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:57:06,726  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=surgical_abdomen  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:57:06,726  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pyelonephritis_urosepsis  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:57:06,727  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=dengue_meningococcaemia  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:57:06,727  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=cardiac_syncope  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:57:06,728  INFO  backend.llm.clinical_reasoner  REASONER_REQ  turn=10  info_count=13
+2026-04-15 09:57:14,323  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:57:14,348  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=7620ms  in=1122  out=404  finish_reason=stop  max_tokens=512
+2026-04-15 09:57:14,350  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=clinical_reasoner  model=gpt-4.1-mini  in=1122  out=404  cost=$0.00109520
+2026-04-15 09:57:14,351  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 53 | Successes: 53 | Retries: 0 | Failures: 0 | Total Output Tokens: 5844
+2026-04-15 09:57:14,352  INFO  backend.llm.client  LLM_CALL  caller=clinical_reasoner          provider=openai    model=gpt-4.1-mini                    status=OK  latency=   7624ms  in_tokens=1313    out_tokens=405     cost=$0.001173  max_tokens=512
+2026-04-15 09:57:14,353  INFO  backend.llm.clinical_reasoner  REASONER_RAW  response_len=1623
+2026-04-15 09:57:14,353  INFO  backend.llm.clinical_reasoner  REASONER_OK  hypotheses=5  top=Hypothyroidism(92.00)  next_q=appetite changes  confidence=moderate  summarize=False
+2026-04-15 09:57:14,354  INFO  backend.agent.nodes.reason  REASON_HYPOTHESIS  leading=Hypothyroidism  score=92.000  differential=4  ruled_out=0
+2026-04-15 09:57:14,354  INFO  backend.agent.nodes.reason  REASON_EXIT  phase=narrowing  info=13  gaps=['appetite changes']  hypothesis=Hypothyroidism(92.000)  confidence=moderate
+2026-04-15 09:57:14,356  INFO  backend.agent.nodes.flow_control  FLOW_ENTRY  phase=narrowing  intent=terminate  info_count=13  gaps=1  confirmed_rf=0  ending=none  closing_turn=0
+2026-04-15 09:57:14,359  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=meningitis_triad  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:57:14,360  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=acute_mi_pattern  score=0  soft=2  hard=3  state=clear
+2026-04-15 09:57:14,362  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=subarachnoid_haemorrhage  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:57:14,362  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pulmonary_embolism_pattern  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:57:14,363  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=stroke_pattern  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:57:14,368  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=surgical_abdomen  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:57:14,370  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pyelonephritis_urosepsis  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:57:14,371  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=dengue_meningococcaemia  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:57:14,373  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=cardiac_syncope  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:57:14,381  INFO  backend.agent.nodes.flow_control  FLOW_MOVE  type=question  target=appetite changes  ask_count=1
+2026-04-15 09:57:14,389  INFO  backend.agent.nodes.response_gen  RESPONSE_GEN_ENTRY  move_type=question  pending_explanation=False  intent=terminate
+2026-04-15 09:57:14,392  INFO  backend.llm.response_generator  RESPONSE_REQ  move_type=question  target_gap=appetite changes  red_flag_id=(none)
+2026-04-15 09:57:15,376  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:57:15,403  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=1010ms  in=302  out=27  finish_reason=stop  max_tokens=200
+2026-04-15 09:57:15,410  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=response_generator  model=gpt-4.1-mini  in=302  out=27  cost=$0.00016400
+2026-04-15 09:57:15,416  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 54 | Successes: 54 | Retries: 0 | Failures: 0 | Total Output Tokens: 5871
+2026-04-15 09:57:15,427  INFO  backend.llm.client  LLM_CALL  caller=response_generator         provider=openai    model=gpt-4.1-mini                    status=OK  latency=   1034ms  in_tokens=310     out_tokens=33      cost=$0.000177  max_tokens=200
+2026-04-15 09:57:15,438  INFO  backend.llm.response_generator  RESPONSE_RAW  response='Thank you for sharing all that with me. Have you noticed any changes in your appetite recently, like eating more or less than usual?'
+2026-04-15 09:57:15,450  INFO  backend.llm.response_generator  RESPONSE_OK  move_type=question  len=132
+2026-04-15 09:57:15,463  INFO  backend.agent.nodes.response_gen  RESPONSE_GEN_EXIT  response_len=132  was_blended=False
+2026-04-15 09:57:15,479  INFO  backend.agent.nodes.safety  SAFETY_ENTRY  response_len=132  turn=10  questions_asked=13
+2026-04-15 09:57:15,488  INFO  backend.agent.nodes.safety  SAFETY_ESCALATION_CHECK  info_count=13  keys=['Hairfall', 'Weight_Gain', 'Acne', 'Age', 'Sex', 'Menstrual_Regularity', 'Menstrual_Bleeding', 'Weight_Distribution', 'Fatigue', 'Cold_Intolerance', 'Skin_Texture', 'Menstrual_Pain', 'Skin_Temperature_Changes']
+2026-04-15 09:57:16,458  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:57:16,477  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=974ms  in=209  out=14  finish_reason=stop  max_tokens=60
+2026-04-15 09:57:16,489  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=safety.escalation_check  model=gpt-4.1-mini  in=209  out=14  cost=$0.00010600
+2026-04-15 09:57:16,519  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 55 | Successes: 55 | Retries: 0 | Failures: 0 | Total Output Tokens: 5885
+2026-04-15 09:57:16,550  INFO  backend.llm.client  LLM_CALL  caller=safety.escalation_check    provider=openai    model=gpt-4.1-mini                    status=OK  latency=   1047ms  in_tokens=206     out_tokens=25      cost=$0.000122  max_tokens=60
+2026-04-15 09:57:16,567  INFO  backend.agent.nodes.safety  SAFETY_ESCALATION_RESULT  decision=YES  reason='Symptoms suggest possible hormonal imbalance or thyroid dysfunction requiring urgent evaluation.'
+2026-04-15 09:57:16,582  WARNING  backend.agent.nodes.safety  SAFETY_ESCALATION_TRIGGERED  appended_warning  reason='Symptoms suggest possible hormonal imbalance or thyroid dysfunction requiring urgent evaluation.'
+2026-04-15 09:57:16,596  INFO  backend.agent.nodes.safety  SAFETY_EXIT  final_len=325  turn=11  new_questions=1  last_question=appetite changes
+2026-04-15 09:57:16,632  INFO  backend.session.manager  SESSION_MESSAGE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  message_len=10  response_len=325  phase=narrowing  turn=11
+2026-04-15 09:57:16,656  INFO  backend.api.websocket  WS_RESPONSE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  response_len=325  phase=narrowing
+2026-04-15 09:57:32,465  INFO  backend.api.websocket  WS_MESSAGE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  message_len=17
+2026-04-15 09:57:32,470  INFO  backend.agent.nodes.intake  INTAKE_ENTRY  message_len=17  last_gap=appetite changes  existing_facts=13
+2026-04-15 09:57:32,471  INFO  backend.llm.intent_classifier  INTENT_REQ  message_len=17  last_gap=appetite changes
+2026-04-15 09:57:32,476  INFO  backend.llm.fact_extractor  EXTRACT_REQ  message_len=17  last_topic=appetite changes  existing_facts=13
+2026-04-15 09:57:32,962  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:57:32,973  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=501ms  in=264  out=1  finish_reason=stop  max_tokens=10
+2026-04-15 09:57:32,978  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=intent_classifier  model=gpt-4.1-mini  in=264  out=1  cost=$0.00010720
+2026-04-15 09:57:32,980  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 57 | Successes: 56 | Retries: 0 | Failures: 0 | Total Output Tokens: 5886
+2026-04-15 09:57:32,985  INFO  backend.llm.client  LLM_CALL  caller=intent_classifier          provider=openai    model=gpt-4.1-mini                    status=OK  latency=    514ms  in_tokens=283     out_tokens=2       cost=$0.000116  max_tokens=10
+2026-04-15 09:57:32,986  INFO  backend.llm.intent_classifier  INTENT_RAW  raw_response='terminate'  parsed='terminate'
+2026-04-15 09:57:32,986  INFO  backend.llm.intent_classifier  INTENT_OK  result=terminate
+2026-04-15 09:57:33,102  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:57:33,110  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=633ms  in=400  out=1  finish_reason=stop  max_tokens=512
+2026-04-15 09:57:33,111  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=fact_extractor  model=gpt-4.1-mini  in=400  out=1  cost=$0.00016160
+2026-04-15 09:57:33,116  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 57 | Successes: 57 | Retries: 0 | Failures: 0 | Total Output Tokens: 5887
+2026-04-15 09:57:33,117  INFO  backend.llm.client  LLM_CALL  caller=fact_extractor             provider=openai    model=gpt-4.1-mini                    status=OK  latency=    641ms  in_tokens=393     out_tokens=1       cost=$0.000159  max_tokens=512
+2026-04-15 09:57:33,118  INFO  backend.llm.fact_extractor  EXTRACT_RAW  response='[]'
+2026-04-15 09:57:33,119  INFO  backend.llm.fact_extractor  EXTRACT_OK  facts_count=0  facts=[]
+2026-04-15 09:57:33,119  INFO  backend.agent.nodes.intake  INTAKE_INTENT  result=terminate
+2026-04-15 09:57:33,120  INFO  backend.agent.nodes.intake  INTAKE_FACTS  count=0  keys=[]
+2026-04-15 09:57:33,121  INFO  backend.agent.nodes.intake  INTAKE_EXIT  intent=terminate  fact_count=0  volunteered=0  pending_explanation=False
+2026-04-15 09:57:33,122  INFO  backend.agent.routing  ROUTE_DECISION  intent=terminate  destination=reason
+2026-04-15 09:57:33,124  INFO  backend.agent.nodes.reason  REASON_ENTRY  turn=11  phase=narrowing  intake_facts=0  info_count=13
+2026-04-15 09:57:33,126  INFO  backend.agent.nodes.reason  REASON_MERGE  new_denied=[]  info_count=13  unconfirmed=0
+2026-04-15 09:57:33,127  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=meningitis_triad  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:57:33,128  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=acute_mi_pattern  score=0  soft=2  hard=3  state=clear
+2026-04-15 09:57:33,130  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=subarachnoid_haemorrhage  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:57:33,130  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pulmonary_embolism_pattern  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:57:33,130  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=stroke_pattern  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:57:33,130  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=surgical_abdomen  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:57:33,131  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pyelonephritis_urosepsis  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:57:33,131  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=dengue_meningococcaemia  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:57:33,132  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=cardiac_syncope  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:57:33,136  INFO  backend.llm.clinical_reasoner  REASONER_REQ  turn=11  info_count=13
+2026-04-15 09:57:37,444  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:57:37,465  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=4328ms  in=1129  out=400  finish_reason=stop  max_tokens=512
+2026-04-15 09:57:37,469  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=clinical_reasoner  model=gpt-4.1-mini  in=1129  out=400  cost=$0.00109160
+2026-04-15 09:57:37,470  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 58 | Successes: 58 | Retries: 0 | Failures: 0 | Total Output Tokens: 6287
+2026-04-15 09:57:37,471  INFO  backend.llm.client  LLM_CALL  caller=clinical_reasoner          provider=openai    model=gpt-4.1-mini                    status=OK  latency=   4334ms  in_tokens=1313    out_tokens=393     cost=$0.001154  max_tokens=512
+2026-04-15 09:57:37,471  INFO  backend.llm.clinical_reasoner  REASONER_RAW  response_len=1573
+2026-04-15 09:57:37,471  INFO  backend.llm.clinical_reasoner  REASONER_OK  hypotheses=5  top=Hypothyroidism(0.85)  next_q=appetite changes  confidence=moderate  summarize=False
+2026-04-15 09:57:37,471  INFO  backend.agent.nodes.reason  REASON_HYPOTHESIS  leading=Hypothyroidism  score=0.850  differential=1  ruled_out=3
+2026-04-15 09:57:37,472  INFO  backend.agent.nodes.reason  REASON_EXIT  phase=narrowing  info=13  gaps=['appetite changes']  hypothesis=Hypothyroidism(0.850)  confidence=moderate
+2026-04-15 09:57:37,474  INFO  backend.agent.nodes.flow_control  FLOW_ENTRY  phase=narrowing  intent=terminate  info_count=13  gaps=1  confirmed_rf=0  ending=none  closing_turn=0
+2026-04-15 09:57:37,474  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=meningitis_triad  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:57:37,474  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=acute_mi_pattern  score=0  soft=2  hard=3  state=clear
+2026-04-15 09:57:37,475  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=subarachnoid_haemorrhage  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:57:37,475  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pulmonary_embolism_pattern  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:57:37,475  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=stroke_pattern  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:57:37,475  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=surgical_abdomen  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:57:37,476  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=pyelonephritis_urosepsis  score=0  soft=1  hard=4  state=clear
+2026-04-15 09:57:37,476  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=dengue_meningococcaemia  score=0  soft=1  hard=2  state=clear
+2026-04-15 09:57:37,476  INFO  backend.clinical.red_flag_guard  RF_SCORE  flag=cardiac_syncope  score=0  soft=1  hard=3  state=clear
+2026-04-15 09:57:37,476  INFO  backend.agent.nodes.flow_control  FLOW_FATIGUE_TRIGGER  turn=11  max=30  zero_streak=3
+2026-04-15 09:57:37,478  INFO  backend.agent.nodes.response_gen  RESPONSE_GEN_ENTRY  move_type=summarize  pending_explanation=False  intent=terminate
+2026-04-15 09:57:37,478  INFO  backend.llm.summarizer  SUMMARY_REQ  info_count=13  denied_count=0  red_flags=(none)  has_hypothesis=True
+2026-04-15 09:57:41,225  INFO  httpx  HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-15 09:57:41,256  INFO  backend.context.llm_client  LLM call  provider=openai  model=gpt-4.1-mini  latency=3778ms  in=364  out=292  finish_reason=stop  max_tokens=1024
+2026-04-15 09:57:41,259  INFO  backend.cost.tracker  COST_TRACKER  log_call  session=0aeb7ea6777e45a1a76565b5f15ff36a  caller=summarizer  model=gpt-4.1-mini  in=364  out=292  cost=$0.00061280
+2026-04-15 09:57:41,260  INFO  backend.context.llm_client  LLM METRICS -> Calls initiated: 59 | Successes: 59 | Retries: 0 | Failures: 0 | Total Output Tokens: 6579
+2026-04-15 09:57:41,261  INFO  backend.llm.client  LLM_CALL  caller=summarizer                 provider=openai    model=gpt-4.1-mini                    status=OK  latency=   3782ms  in_tokens=386     out_tokens=348     cost=$0.000711  max_tokens=1024
+2026-04-15 09:57:41,261  INFO  backend.llm.summarizer  SUMMARY_RAW  response='## Symptoms Reported\n- Hairfall\n- Weight gain, mostly around hips\n- Sudden increase in acne\n- Regular menstrual cycles lasting 2-3 days, but heavy bleeding\n- Menstrual pain described as very much\n- Feeling more tired than usual despite sufficient food\n- Increased sensitivity to cold, especially air conditioning\n- Oily skin texture\n- Overall bloated feeling\n- Skin feels colder than usual\n\n## Key Findings\n- Heavy menstrual bleeding with significant pain\n- Fatigue and cold intolerance\n- Weight gain'
+2026-04-15 09:57:41,262  INFO  backend.llm.summarizer  SUMMARY_OK  response_len=1590  (with disclaimer)
+2026-04-15 09:57:41,265  INFO  backend.agent.nodes.safety  SAFETY_ENTRY  response_len=1590  turn=11  questions_asked=14
+2026-04-15 09:57:41,268  INFO  backend.agent.nodes.safety  SAFETY_EXIT  final_len=1590  turn=12  new_questions=0  last_question=(none)
+2026-04-15 09:57:41,274  INFO  backend.session.manager  SESSION_MESSAGE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  message_len=17  response_len=1590  phase=narrowing  turn=12
+2026-04-15 09:57:41,276  INFO  backend.api.websocket  WS_RESPONSE  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  response_len=1590  phase=narrowing
+2026-04-15 10:00:06,557  INFO  backend.api.routes  ROUTE_TRANSCRIBE  filename='recording.webm'  size=64052 bytes
+2026-04-15 10:00:06,668  INFO  backend.audio.transcriber  Loading Faster-Whisper model 'medium' on cuda (float16) …
+2026-04-15 10:00:08,709  INFO  httpx  HTTP Request: GET https://huggingface.co/api/models/Systran/faster-whisper-medium/revision/main "HTTP/1.1 200 OK"
+2026-04-15 10:00:13,668  INFO  backend.audio.transcriber  Faster-Whisper model loaded.
+2026-04-15 10:00:14,064  INFO  faster_whisper  Processing audio with duration 00:03.960
+2026-04-15 10:00:15,506  INFO  backend.audio.transcriber  Transcribed 4.0s of audio (en) → 21 chars
+2026-04-15 10:00:15,510  INFO  backend.api.routes  ROUTE_TRANSCRIBE  complete  chars=21  filename='recording.webm'
+INFO:     127.0.0.1:60889 - "POST /api/transcribe HTTP/1.1" 200 OK
+INFO:     Shutting down
+2026-04-15 10:01:37,855  INFO  backend.cost.tracker  COST_TRACKER  finalize  session_id=0aeb7ea6777e45a1a76565b5f15ff36a  calls=59  tokens=28528  cost=$0.01930600
+2026-04-15 10:01:37,856  INFO  backend.api.websocket  WS_DISCONNECT  session_id=0aeb7ea6777e45a1a76565b5f15ff36a
+INFO:     connection closed
+INFO:     Waiting for application shutdown.
+2026-04-15 10:01:37,958  INFO  backend.main  DocTalk API shutting down
+INFO:     Application shutdown complete.
+INFO:     Finished server process [52128]
+INFO:     Stopping reloader process [40848
