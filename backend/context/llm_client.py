@@ -110,20 +110,41 @@ class LLMClient(abc.ABC):
 
 
 # ---------------------------------------------------------------------------
-# Retry wrapper
+# Retry wrapper and Metrics
 # ---------------------------------------------------------------------------
+
+class LLMMetrics:
+    total_calls = 0
+    successes = 0
+    failures = 0
+    retries = 0
+    total_output_tokens = 0
+
+    @classmethod
+    def log_stats(cls):
+        logger.info("LLM METRICS -> Calls initiated: %d | Successes: %d | Retries: %d | Failures: %d | Total Output Tokens: %d", 
+                    cls.total_calls, cls.successes, cls.retries, cls.failures, cls.total_output_tokens)
+
 
 async def _retry_with_backoff(coro_factory, *, max_retries: int, provider: str) -> Any:
     """Execute an async callable with exponential backoff on transient errors."""
+    LLMMetrics.total_calls += 1
     delays = [1, 2, 4, 8, 16]
     last_exc: Exception | None = None
     for attempt in range(max_retries):
         try:
-            return await coro_factory()
+            res = await coro_factory()
+            LLMMetrics.successes += 1
+            LLMMetrics.log_stats()
+            return res
         except LLMRateLimitError:
+            LLMMetrics.failures += 1
+            LLMMetrics.log_stats()
             raise
         except Exception as exc:
             last_exc = exc
+            LLMMetrics.retries += 1
+            LLMMetrics.log_stats()
             delay = delays[min(attempt, len(delays) - 1)]
             logger.warning(
                 "%s API error (attempt %d/%d), retrying in %ds: %s",
@@ -134,6 +155,9 @@ async def _retry_with_backoff(coro_factory, *, max_retries: int, provider: str) 
                 exc,
             )
             await asyncio.sleep(delay)
+    
+    LLMMetrics.failures += 1
+    LLMMetrics.log_stats()
     raise LLMError(f"{provider} failed after {max_retries} attempts") from last_exc
 
 
@@ -199,6 +223,8 @@ class ClaudeClient(LLMClient):
                     "Response will likely fail JSON parsing.",
                     max_tokens,
                 )
+            if usage and usage.output_tokens:
+                LLMMetrics.total_output_tokens += usage.output_tokens
             return resp.content[0].text
 
         return await _retry_with_backoff(
@@ -271,6 +297,8 @@ class OpenAIClient(LLMClient):
                     "Response will likely fail JSON parsing.",
                     max_tokens,
                 )
+            if usage and usage.completion_tokens:
+                LLMMetrics.total_output_tokens += usage.completion_tokens
             return resp.choices[0].message.content or ""
 
         return await _retry_with_backoff(
@@ -347,7 +375,8 @@ class GeminiClient(LLMClient):
                     "Response will likely fail JSON parsing.",
                     max_tokens,
                 )
-
+            if token_count:
+                LLMMetrics.total_output_tokens += token_count
             return resp.text
 
         return await _retry_with_backoff(
@@ -420,6 +449,8 @@ class GroqClient(LLMClient):
                     "Response will likely fail JSON parsing.",
                     max_tokens,
                 )
+            if usage and usage.completion_tokens:
+                LLMMetrics.total_output_tokens += usage.completion_tokens
             return resp.choices[0].message.content or ""
 
         return await _retry_with_backoff(

@@ -153,9 +153,6 @@ You are conducting a live medical consultation. Below is the conversation so far
 ## Domain gap categories (from the framework)
 {gap_categories}
  
-## Questions Already Asked by the Doctor
-{questions_asked}
- 
 ## Instructions
 Carefully analyze every patient utterance. Then return a JSON object with TWO keys: \
 "context" and "doctor_response".
@@ -165,46 +162,32 @@ Carefully analyze every patient utterance. Then return a JSON object with TWO ke
 - "information_gathered" (array of {{"key": string, "value": string, "source_utt": string}}): \
 concrete facts the patient has provided. Each key should map to a domain category when possible \
 (e.g. "Site", "Onset"). "source_utt" is the utterance id that provided this info. \
-Be thorough — extract EVERY piece of clinical information the patient mentions, including \
-seemingly minor details (duration, timing, triggers, severity, associated symptoms).
+Be thorough — extract EVERY piece of clinical information the patient mentions. \
+CRITICAL NEGATIVE EXTRACTION: If the patient says "no", "none", or denies a symptom (e.g. no fever), you MUST extract this as a gathered fact with value "Denied" so it is removed from gaps.
 - "gaps" (array of strings): domain framework categories that are BOTH clinically relevant \
-for this case AND have NOT yet been covered or were answered too vaguely. Only list gaps \
-that are still open — do NOT include categories irrelevant to this presentation.
-- "active_categories" (array of strings): the gap categories that are clinically relevant for \
-THIS patient's presentation. Include all Tier 1 categories plus any Tier 2 categories that \
-apply based on the symptoms described. For example, fever → add Epidemiological History, \
-Travel History; chest pain → add Family History, Smoking / Alcohol / Substance use.
+for this case AND have NOT yet been covered. Only list gaps still open — do NOT include \
+categories irrelevant to this presentation. NEVER include categories already in \
+information_gathered.
+- "active_categories" (array of strings): Tier 1 categories plus relevant Tier 2 categories \
+based on symptoms described.
 - "signals" (array of {{"type": string, "detail": string, "source_utt": string}}): \
-notable clinical signals. Types:
-  - "red_flag": urgent or dangerous findings (e.g. exertional chest pain, sudden severe onset, \
-radiation to arm/jaw, syncope, hemodynamic instability)
-  - "contradiction": patient gave conflicting information
-  - "vague": patient's answer is too unspecific to be clinically useful (e.g. "sometimes", \
-"a while ago")
-  - "emotional": patient shows distress, anxiety, fear, or emotional cues worth acknowledging
-- "conversation_phase" (string): set to "gathering" while gaps remain. Set to "summary" when \
-all gaps in active_categories have been adequately covered and no vague signals remain.
- 
-Be aggressive about flagging signals — it is better to flag something and be wrong than to \
-miss a red flag.
+notable clinical signals. Types: "red_flag", "contradiction", "vague", "emotional". \
+Be aggressive — better to over-flag than miss something critical.
+- "conversation_phase" (string): "gathering" while gaps remain. "summary" when all gaps covered.
  
 ### "doctor_response" (string)
 Your next reply as the doctor. Rules:
-1. Start with empathy or validation when appropriate — briefly acknowledge what the patient \
-just said (1 sentence max). Do NOT restate the entire history.
-2. Ask exactly ONE focused question. Never ask multi-part questions.
-   - If any red_flag signals exist, follow up on those FIRST.
-   - If a previous answer was flagged as "vague", ask for clarification BEFORE moving on.
-   - Otherwise, target the highest-priority uncovered gap from the gaps list.
-3. If the patient says "no", "nothing", "not really", or any clear negative — accept it \
-and move on. Mark that category as covered. Do NOT re-ask the same thing.
-4. NEVER repeat a question from the "Questions Already Asked" list above.
-5. Use simple, everyday language. Say "blood test" not "CBC". Say "heart tracing" not "ECG". \
-Only use medical terms if the patient used them first.
-6. If a red flag combination is detected (e.g. fever + neck stiffness), include a brief \
-warning: "Based on what you're describing, I'd recommend seeking urgent attention if \
-[specific symptoms worsen]."
-7. Keep to 1-3 sentences total.
+1. Ask TWO focused questions targeting DIFFERENT gap categories. Combine them naturally \
+(e.g. "Have you noticed any rash? Also, have you traveled recently?"). \
+If only one gap remains, ask just one. If red flags exist, one question MUST address the red flag.
+2. If a previous answer was flagged as "vague", ask for clarification BEFORE moving on.
+3. ONLY ask about categories in the "gaps" array. Topics in "information_gathered" are DONE.
+4. If the patient says "no"/"nothing"/"not really" → accept it, move on.
+ 
+BANNED OPENINGS (never use): "I understand", "I see that", "I note that", \
+"Thank you for sharing", "Based on what you've told me"
+GOOD OPENINGS (vary these): "That sounds tough.", "Got it.", "Okay.", "Right.", \
+"That's helpful to know.", or jump straight to the question with no preamble.
  
 Respond ONLY with valid JSON, no markdown fences or extra text.
 """
@@ -222,9 +205,6 @@ along with the current analysis state.
 ## Domain gap categories (from the framework)
 {gap_categories}
  
-## Questions Already Asked by the Doctor
-{questions_asked}
- 
 ## Instructions
 The patient has just responded. Analyze their latest message against the current context above. \
 Update the context and produce your next doctor response.
@@ -233,45 +213,32 @@ Return a JSON object with TWO keys: "context" and "doctor_response".
  
 ### "context" (object — do NOT include core_topic, it is already set)
 - "information_gathered" (array of {{"key": string, "value": string, "source_utt": string}}): \
-ALL facts gathered so far — carry forward everything from the current context above, plus \
-add any NEW information from the latest patient message. Each key should map to a domain \
-category when possible. Be thorough — extract every clinical detail.
-- "gaps" (array of strings): domain gap categories that are BOTH in active_categories AND \
-still have no clear, specific answer. Remove any gap now adequately covered. Only list gaps \
-that genuinely remain open.
-- "active_categories" (array of strings): the subset of domain gap categories clinically \
-relevant for this case. Carry forward from the current context and update if new information \
-changes relevance (e.g., patient mentions family history of heart disease — add "Family History" \
-if not already active).
-- "conversation_phase" (string): set to "summary" if ALL gaps in active_categories have been \
-adequately covered. Otherwise keep as "gathering".
+ALL facts gathered so far — carry forward everything from the current context, plus \
+add NEW information from the latest patient message. Be thorough. \
+CRITICAL NEGATIVE EXTRACTION: If the patient says "no", "none", or denies a symptom (e.g. no fever), you MUST extract this as a gathered fact with value "Denied" so it is removed from gaps.
+- "gaps" (array of strings): categories in active_categories that still have no clear answer. \
+Remove any gap now covered. NEVER list categories already in information_gathered.
+- "active_categories" (array of strings): clinically relevant gap categories. Carry forward \
+and update if new information changes relevance.
+- "conversation_phase" (string): "summary" if ALL gaps covered, otherwise "gathering".
 - "signals" (array of {{"type": string, "detail": string, "source_utt": string}}): \
-ALL signals — carry forward previous ones AND add new ones from the latest message. Types:
-  - "red_flag": urgent/dangerous findings needing immediate follow-up
-  - "contradiction": conflicting information from the patient
-  - "vague": answers too unspecific to be clinically useful
-  - "emotional": distress, anxiety, fear, or emotional cues
- 
-Be aggressive about flagging — better to over-flag than miss something critical.
+ALL signals — carry forward previous ones AND add new ones. Types: "red_flag", \
+"contradiction", "vague", "emotional". Be aggressive — better to over-flag than miss.
  
 ### "doctor_response" (string)
 Your next reply as the doctor. Rules:
-1. Start with empathy or validation when appropriate — briefly acknowledge what the patient \
-just said (1 sentence max). Do NOT restate the entire history.
-2. Ask exactly ONE focused question. Never ask multi-part questions.
-   - If any red_flag signals exist, follow up on those FIRST.
-   - If a previous answer was flagged as "vague", ask for clarification BEFORE moving on.
-   - Otherwise, target the highest-priority uncovered gap from the gaps list.
-   - If ALL gaps are covered and no vague answers remain, set conversation_phase to "summary".
-3. If the patient says "no", "nothing", "not really", or any clear negative — accept it \
-and move on. Mark that category as covered. Do NOT re-ask the same thing.
-4. NEVER repeat a question from the "Questions Already Asked" list above.
-5. Use simple, everyday language. Say "blood test" not "CBC". Say "heart tracing" not "ECG". \
-Only use medical terms if the patient used them first.
-6. If a red flag combination is detected (e.g. fever + neck stiffness), include a brief \
-warning: "Based on what you're describing, I'd recommend seeking urgent attention if \
-[specific symptoms worsen]."
-7. Keep to 1-3 sentences total.
+1. Ask TWO focused questions targeting DIFFERENT gap categories. Combine them naturally \
+(e.g. "Have you noticed any rash? Also, have you traveled recently?"). \
+If only one gap remains, ask just one. If red flags exist, one question MUST address the red flag.
+2. If a previous answer was flagged as "vague", ask for clarification BEFORE moving on.
+3. ONLY ask about categories in the "gaps" array. Topics in "information_gathered" are DONE.
+4. If the patient says "no"/"nothing"/"not really" → accept it, move on.
+5. If ALL gaps are covered, set conversation_phase to "summary".
+ 
+BANNED OPENINGS (never use): "I understand", "I see that", "I note that", \
+"Thank you for sharing", "Based on what you've told me"
+GOOD OPENINGS (vary these): "That sounds tough.", "Got it.", "Okay.", "Right.", \
+"That's helpful to know.", or jump straight to the question with no preamble.
  
 Respond ONLY with valid JSON, no markdown fences or extra text.
 """
@@ -322,6 +289,42 @@ _SUMMARY_SYSTEM_PROMPT = (
     "Do not add opinions or analysis."
 )
  
+_RED_FLAG_CHECK_PROMPT = """\
+You are a medical safety checker. Review the patient symptoms below and check \
+for dangerous combinations.
+ 
+## Symptoms collected so far
+{symptoms}
+ 
+## Red flag combinations to check
+- Fever + neck stiffness/photophobia -> meningitis
+- Fever >103F + headache -> needs meningitis screening (ask about neck stiffness)
+- Fever + rash + bleeding -> dengue/meningococcaemia
+- Chest pain + arm/jaw radiation + sweating -> acute MI
+- Sudden worst-ever headache -> subarachnoid haemorrhage
+- Abdominal pain + rigidity -> surgical abdomen
+- SOB + pleuritic pain + leg swelling -> PE
+- Syncope + exertional symptoms -> cardiac
+- Unilateral weakness + speech difficulty -> stroke
+ 
+Return a JSON object:
+{{
+  "red_flags_found": [{{"flag": "description", "urgency": "high|medium",
+                        "follow_up_question": "question to ask patient"}}],
+  "warning_message": "message to append to doctor response, or empty string"
+}}
+Respond ONLY with valid JSON.
+"""
+ 
+_BANNED_PREFIXES = [
+    "i understand",
+    "i see that",
+    "i note that",
+    "thank you for sharing",
+    "based on what you've told me",
+    "based on what you're telling me",
+]
+ 
  
 def _estimate_tokens(text: str) -> int:
     """Rough token estimate: 1 token ~ 4 characters."""
@@ -360,6 +363,7 @@ class ContextEngine:
         self._analyzing = False
  
         self._responder_count: int = 0
+        self._exchange_count: int = 0
         self._resolved_gaps: set[str] = set()
  
         self._cached_summary: str = ""
@@ -524,15 +528,16 @@ class ContextEngine:
     async def chat_reply(self, patient_utt: Utterance) -> str:
         """Process a patient message and return the doctor's response.
  
-        Single LLM call produces context update, doctor response, and
-        suggestions.  Context and suggestion events are emitted via the
-        existing subscriber mechanism; the doctor response text is returned
-        to the caller for broadcast.
+        Flow: LLM call → strip banned openings → dedup check (max 1 retry)
+        → parse/merge context → red flag check every 2 exchanges → emit.
         """
         self._utterances.append(patient_utt)
+        self._exchange_count += 1
         logger.debug(
-            "chat_reply called: session='%s' patient_text_len=%d total_utterances=%d",
-            self._session_id, len(patient_utt.text), len(self._utterances),
+            "chat_reply called: session='%s' patient_text_len=%d "
+            "total_utterances=%d exchange=%d",
+            self._session_id, len(patient_utt.text),
+            len(self._utterances), self._exchange_count,
         )
  
         use_summary = self._should_use_summary_prompt()
@@ -554,6 +559,8 @@ class ContextEngine:
             doctor_response = "Could you tell me more about that?"
             logger.warning("Chat LLM call returned empty doctor_response — using fallback")
  
+        doctor_response = self._strip_banned_openings(doctor_response)
+ 
         if context_raw is not None and isinstance(context_raw, dict):
             new_ctx = self._parse_and_merge(context_raw)
         else:
@@ -564,6 +571,19 @@ class ContextEngine:
         self._log_context_update(new_ctx)
         await self._emit_context(new_ctx)
  
+        if self._exchange_count % 2 == 0:
+            try:
+                rf_signals, warning = await self._check_red_flags()
+                if rf_signals:
+                    self._context.signals.extend(rf_signals)
+                    await self._emit_context(self._context)
+                if warning:
+                    doctor_response += "\n\n" + warning
+            except LLMError:
+                logger.error("Red flag check failed (non-critical)")
+            except Exception:
+                logger.exception("Unexpected error in red flag check")
+ 
         self._questions.append(doctor_response)
  
         logger.info(
@@ -571,6 +591,47 @@ class ContextEngine:
             self._session_id, len(doctor_response), new_ctx.conversation_phase,
         )
         return doctor_response
+ 
+    # ------------------------------------------------------------------
+    # Post-processing helpers
+    # ------------------------------------------------------------------
+ 
+    @staticmethod
+    def _strip_banned_openings(response: str) -> str:
+        """Remove robotic 'I understand...' openings."""
+        for prefix in _BANNED_PREFIXES:
+            if response.lower().startswith(prefix):
+                for i, ch in enumerate(response):
+                    if ch in ".!?" and i > 10:
+                        response = response[i + 1:].strip()
+                        break
+        return response
+ 
+    async def _check_red_flags(self) -> tuple[list[Signal], str]:
+        """Lightweight LLM call checking accumulated symptoms for red flags."""
+        symptoms = {
+            item.key: item.value
+            for item in self._context.information_gathered
+        }
+        prompt = _RED_FLAG_CHECK_PROMPT.format(
+            symptoms=json.dumps(symptoms, indent=2),
+        )
+        system = (
+            "You are a medical safety checker. Be thorough — "
+            "flag anything concerning."
+        )
+        raw = await self._llm.analyze_json(system, prompt, max_tokens=1024)
+ 
+        signals: list[Signal] = []
+        for rf in raw.get("red_flags_found", []):
+            signals.append(Signal(
+                type="red_flag",
+                detail=str(rf.get("flag", "")),
+                source_utt="system",
+            ))
+ 
+        warning = str(raw.get("warning_message", ""))
+        return signals, warning
  
     def _should_use_summary_prompt(self) -> bool:
         """Check if we should switch to the summary prompt."""
@@ -605,6 +666,46 @@ class ContextEngine:
     # ------------------------------------------------------------------
  
     def _build_system_prompt(self, *, chat: bool = False) -> str:
+        if chat:
+            hard_rules = (
+                "=== HARD RULES (you MUST follow these) ===\n"
+                "1. NEVER start your response with \"I understand\", \"I see that\", "
+                "\"I note that\", \"Thank you for sharing\", or \"Based on what you've told me\". "
+                "Vary your openings.\n"
+                "2. Ask exactly TWO focused questions per turn, targeting DIFFERENT gap categories. "
+                "Combine them naturally (e.g. \"Have you noticed any rash? Also, have you traveled recently?\"). "
+                "If only one gap remains, ask just one.\n"
+                "3. ONLY ask about categories listed in the \"gaps\" array. Topics already in "
+                "\"information_gathered\" are DONE — NEVER revisit them.\n"
+                "4. If the patient says \"no\" / \"nothing\" / \"not really\" → accept it and move on. "
+                "Mark that category as covered.\n"
+                "5. Use everyday language ONLY. Say \"blood test\" not \"CBC\". "
+                "Say \"spread\" not \"radiate\". No medical jargon.\n"
+                "6. Keep responses to 2-4 sentences maximum.\n"
+                "7. Do NOT restate the patient's history. Acknowledge ONLY their latest answer briefly.\n"
+                "8. If a red flag is detected, include a brief warning about seeking urgent care.\n"
+                "=== END HARD RULES ===\n\n"
+            )
+ 
+            framework = (
+                f"{self._profile.system_prompt_fragment}\n\n"
+                f"Gap categories for this domain: {json.dumps(self._profile.gap_categories)}\n"
+                f"Signal types to watch for: {json.dumps(self._profile.signal_types)}\n"
+            )
+ 
+            priority_section = "\nPriority for question selection:\n"
+            for i, rule in enumerate(self._profile.priority_rules, 1):
+                priority_section += f"  {i}. {rule}\n"
+ 
+            recap = (
+                "\n=== RULES RECAP ===\n"
+                "REMEMBER: No \"I understand\" openings. TWO questions per turn. "
+                "ONLY ask about gaps, NEVER about information_gathered topics. "
+                "Accept \"no\" answers. No jargon. No history recaps.\n"
+            )
+ 
+            return hard_rules + framework + priority_section + recap
+ 
         base = (
             "You are an expert conversation analyst specializing in "
             f"the {self._profile.name} domain.\n\n"
@@ -612,17 +713,7 @@ class ContextEngine:
             f"Gap categories for this domain: {json.dumps(self._profile.gap_categories)}\n"
             f"Signal types to watch for: {json.dumps(self._profile.signal_types)}\n"
         )
-        if chat:
-            base += (
-                "\nYou are ALSO acting as the interviewer (doctor) in this live consultation. "
-                "In addition to analysing the conversation, you must produce the doctor's next "
-                "response — a natural, empathetic reply that acknowledges the patient and asks "
-                "the most important outstanding question based on the remaining gaps.\n"
-                f"\nPriority for question selection:\n"
-            )
-            for i, rule in enumerate(self._profile.priority_rules, 1):
-                base += f"  {i}. {rule}\n"
-        elif settings.suggestion_combined_mode:
+        if settings.suggestion_combined_mode:
             base += (
                 f"\nPriority rules for suggestions: "
                 f"{json.dumps(self._profile.priority_rules)}\n"
@@ -663,7 +754,6 @@ class ContextEngine:
             kwargs: dict[str, Any] = {"transcript": transcript}
             if chat:
                 kwargs["gap_categories"] = gap_categories_json
-                kwargs["questions_asked"] = questions_json
                 if not is_first_run or summary:
                     kwargs["current_context"] = prev_ctx
             else:
@@ -851,6 +941,7 @@ class ContextEngine:
         self._context = ContextObject(session_id=self._session_id)
         self._analyzing = False
         self._responder_count = 0
+        self._exchange_count = 0
         self._resolved_gaps.clear()
         self._cached_summary = ""
         self._summary_utt_count = 0

@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     google_api_key: str = ""
     groq_api_key: str = ""
     anthropic_model: str = "claude-sonnet-4-20250514"
-    openai_model: str = "gpt-4o"
+    openai_model: str = "gpt-4.1-mini"
     gemini_model: str = "gemini-2.5-flash"
     groq_model: str = "llama-3.3-70b-versatile"
     llm_temperature: float = 0.2
